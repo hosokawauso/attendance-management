@@ -1,6 +1,8 @@
-
-
-
-.page-title {
-  color: aqua;
+.content {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 20px;
+  box-sizing: border-box;
 }

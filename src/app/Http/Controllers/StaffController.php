@@ -11,4 +11,10 @@ class StaffController extends Controller
         $page = $request->query('page', 'recommend');
         return view('staff.attendance_list', compact('page'));
     }
+
+    public function record(Request $request)
+    {
+        return view('staff.attendance');
+    }
 }
+

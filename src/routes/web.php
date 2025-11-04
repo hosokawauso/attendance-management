@@ -13,5 +13,11 @@ use App\Http\Controllers\StaffController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/admin/login', function()
+    {return view('auth.admin_login');
+})->name('admin.login');
+
+Route::get('/attendance', [StaffController::class, 'record'])->name('attendance.record');
 
 Route::get('/attendance/list', [StaffController::class, 'index'])->name('attendance.index');
+
