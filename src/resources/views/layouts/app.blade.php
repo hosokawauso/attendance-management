@@ -13,7 +13,7 @@
   @yield('css')
 </head>
 <body>
-    <div class="app">
+{{--     <div class="app">
     <header class="header">
       <a href="/">
         <div class="logo">
@@ -22,9 +22,9 @@
       </a>
 
       @auth
-      {{-- ログイン中だけ表示 --}}
+ --}}      {{-- ログイン中だけ表示 --}}
       <nav class="header__nav">
-    <a href="#">勤怠一覧</a>
+{{--     <a href="#">勤怠一覧</a>
     <a href="#">スタッフ一覧</a>
     <a href="#">申請一覧</a>
     <a href="#">ログアウト</a>
@@ -32,20 +32,20 @@
 
       </nav>
       @endauth
+ --}}
 
-
-  <header>
+<header>
     @yield('header')
     <div class="header-inner">
       <div >
-      <img class="logo" src="{{ asset()}}" alt="COACHTECH" >
+      <img class="logo" src="{{ asset('img/COACHTECHlogo.jpg')}}" alt="COACHTECH" >
       </div>
       <nav class="nav" aria-label="メイン">
     <a href="#">勤怠</a>
     <a href="#">日記一覧</a>
     <a href="#">申請</a>
-     {{--<a href="{{ route('logout') }}"
-       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">ログアウト</a> --}}
+     <a href="#"
+       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">ログアウト</a>
       </nav>
     </div>
   </header>

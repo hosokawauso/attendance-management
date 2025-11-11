@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StaffController;
+use App\Http\Controllers\AttendanceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,7 +18,9 @@ Route::get('/admin/login', function()
     {return view('auth.admin_login');
 })->name('admin.login');
 
-Route::get('/attendance', [StaffController::class, 'record'])->name('attendance.record');
-
+/* Route::get('/attendance', [StaffController::class, 'record'])->name('attendance.record');
+ */
 Route::get('/attendance/list', [StaffController::class, 'index'])->name('attendance.index');
 
+Route::middleware('auth')
+    ->match(['get','post'], '/attendance', [AttendanceController::class, 'handle'])->name('attendance');
