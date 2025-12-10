@@ -1,0 +1,41 @@
+.month-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: #f2f2f5;
+  /* 明るいグレー */
+}
+
+.month-nav .nav-btn {
+  text-decoration: none;
+  color: #333;
+  font-size: 14px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  transition: background .15s ease;
+}
+
+.month-nav .nav-btn:hover {
+  background: #e7e7eb;
+}
+
+.month-nav .nav-center {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  letter-spacing: .5px;
+}
+
+.month-nav .nav-icon {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.month-nav .nav-next {
+  margin-left: auto;
+}
+

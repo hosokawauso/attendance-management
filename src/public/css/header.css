@@ -1,8 +1,21 @@
-header {
-  background-color: black
+.header-inner {
+  background-color: black;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo-space {
+  width: 50%;
 }
 
 
 .logo {
-  width: 30%;
+  width: 100%;
+}
+
+.nav a {
+  color: #fff;
+  text-decoration: none;
+  font-size: bold;
 }

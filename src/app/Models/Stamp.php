@@ -10,18 +10,22 @@ class Stamp extends Model
 {
     use HasFactory;
 
+    const STATUS_UNAPPROVED = 0;
+    const STATUS_PENDING = 1;
+    const STATUS_APPROVED =2;
+
     protected $fillable = [
         'staff_id',
         'stamp_date',
         'start_work',
         'end_work',
         'total_work',
-        'approved',
+        'status',
         'remarks',
     ];
 
     protected $casts = [
-        'approved' => 'boolean',
+        'status' => 'integer',
         'stamp_date' => 'date',
         'start_work' => 'datetime',
         'end_work' => 'datetime',
@@ -46,4 +50,5 @@ class Stamp extends Model
                 return Carbon::parse($r->start_rest)->diffInMinutes(Carbon::parse($r->end_rest));
             });
     }
+
 }

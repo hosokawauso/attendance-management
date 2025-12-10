@@ -13,11 +13,12 @@
   <div class="date">
     {{ $now->locale('ja')->isoFormat('YYYY年MM月DD日(ddd)')}}
   </div>
-  <div class="current-time">
-    {{ $now->format('H:i') }}
+  <div class="current-time" id="current-time">
+    {{-- {{ $now->format('H:i') }} --}}
   </div>
 
-  <form method="POST" action="{{ route('attendance') }}">@csrf
+  <form method="POST" action="{{ route('attendance') }}">
+    @csrf
     <button name="action" value="clock-in">出勤</button>
   </form>
 </div>
@@ -27,14 +28,15 @@
   <div class="date">
     {{ $now->locale('ja')->isoFormat('YYYY年MM月DD日(ddd)')}}
   </div>
-  <div class="current-time">
-    {{ $now->format('H:i') }}
-  </div>
+  <div class="current-time" id="current-time">
+{{--     {{ $now->format('H:i') }}
+ --}}  </div>
 
-  <form method="POST" action="{{ route('attendance') }}" style="display:inline">@csrf
+  <form method="POST" action="{{ route('attendance') }}">
+    @csrf
     <button name="action" value="break-start">休憩入</button>
   </form>
-  <form method="POST" action="{{ route('attendance') }}" style="display:inline">
+  <form method="POST" action="{{ route('attendance') }}">
     @csrf
     <button name="action" value="clock-out">退勤</button>
   </form>
@@ -44,9 +46,9 @@
   <div class="date">
     {{ $now->locale('ja')->isoFormat('YYYY年MM月DD日(ddd)')}}
   </div>
-  <div class="current-time">
-    {{ $now->format('H:i') }}
-  </div>
+  <div class="current-time" id="current-time">
+{{--     {{ $now->format('H:i') }}
+ --}}  </div>
 
   <form method="POST" action="{{ route('attendance') }}">
     @csrf
@@ -58,26 +60,32 @@
   <div class="date">
     {{ $now->locale('ja')->isoFormat('YYYY年MM月DD日(ddd)')}}
   </div>
-  <div class="current-time">
-    {{ $now->format('H:i') }}
-  </div>
+  <div class="current-time" id="current-time">
+{{--     {{ $now->format('H:i') }}
+ --}}  </div>
 
   <p>お疲れさまでした。</p>
 @endif
 
-{{-- @if ($stamp)
-  <h3 style="margin-top:1rem;">本日のログ</h3>
-  <ul>
-    <li>出勤: {{ $stamp->start_work?->format('H:i') ?? '-' }}</li>
-    <li>退勤: {{ $stamp->end_work?->format('H:i') ?? '-' }}</li>
-  </ul>
-  @if ($rests->count())
-    <h4>休憩</h4>
-    <ul>
-      @foreach($rests as $r)
-        <li>{{ $r->start_rest?->format('H:i') }} - {{ $r->end_rest?->format('H:i') ?? '...' }}</li>
-      @endforeach
-    </ul>
-  @endif
-@endif
- --}}@endsection
+@push('script')
+  <script>
+    (function () {
+      function showCurrentTime() {
+        const time = document.getElementById('current-time');
+        if(!time) return;
+
+        const now = new Date();
+        const nowHours = String(now.getHours()).padStart(2, '0');
+        const nowMinutes = String(now.getMinutes()).padStart(2, '0');
+        const s = String(now.getSeconds()).padStart(2, '0');
+
+        time.textContent = `${nowHours}:${nowMinutes}:${s}`;
+      }
+      showCurrentTime();
+
+      setInterval(showCurrentTime, 1000)
+    })();
+  </script>
+@endpush
+
+@endsection

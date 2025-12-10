@@ -14,39 +14,38 @@
       <label for="name" class="register-form__label">名前</label>
       <input type="text" class="register-form__input" name="name" id="name" value="{{ old('name') }}">
       </div>
-         {{--  <p class="register-form__error-message">
+         <p class="register-form__error-message">
           @error('name')
           {{ $message }}
           @enderror
-        </p> --}}
+        </p>
       </div>
       <div class="register-form__group">
         <label class="register-form__label" for="email">メールアドレス</label>
         <input class="register-form__input" type="text" inputmode="email" autocomplete="email" name="email" id="email" value="{{ old('email') }}">
-        {{-- <p class="register-form__error-message">
+        <p class="register-form__error-message">
           @error('email')
           {{ $message }}
           @enderror
-        </p> --}}
+        </p>
       </div>
       <div class="register-form__group">
         <label class="register-form__label" for="password">パスワード</label>
         <input class="register-form__input" type="password" name="password" id="password">
-        {{-- <p class="register-form__error-message">
+        <p class="register-form__error-message">
           @error('password')
           {{ $message }}
           @enderror
-        </p> --}}
+        </p>
       </div>
       <div class="register-form__group">
         <label class="register-form__label" for="password_confirmation">確認用パスワード</label>
         <input class="register-form__input" type="password" name="password_confirmation" id="password_confirmation">
-        {{-- <p class="register-form__error-message">
+        <p class="register-form__error-message">
           @error('password_confirmation')
           {{ $message }}
           @enderror
-        </p> --}}
-      </div>
+        </p>
 
       <div class="register-form__button">
         <button class="register-form__button-submit" type="submit">登録する</button>

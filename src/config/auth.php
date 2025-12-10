@@ -40,6 +40,12 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+
+        'staff' => [
+            'driver' => 'session',
+            'provider' => 'staffs',
+        ],
+
     ],
 
     /*
@@ -65,10 +71,7 @@ return [
             'model' => App\Models\Staff::class,
         ],
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        App\Providers\FortifyServiceProvider::class,
     ],
 
     /*

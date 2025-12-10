@@ -1,31 +1,86 @@
 @extends('layouts.app')
 
 @section('css')
-
+<link rel="stylesheet" href="{{ asset('css/attendance_list.css') }}">
 @endsection
 
 @section('content')
 <div class="list-container">
-  <h2 class="page-title">申請一覧</h2>
+  <h2 class="page-title">勤怠一覧</h2>
   <div>
     <div class="top__tabs">
-    <a class="{{ $page === 'recommend' ? 'active' : '' }}" href="/">承認待ち</a>
-    <a class="{{ $page === 'mylist' ? 'active' : '' }}" href="/?page=mylist">承認済み</a>
+      <a class="nav-btn" href="{{ route('attendance.list', ['month' => $prevMonth]) }}">← 前月</a>
+
+  <div class="nav-center">
+    <span class="nav-icon" aria-hidden="true">📅</span>
+    <strong>{{ $month->format('Y') }}/{{ $month->format('m') }}</strong>
+  </div>
+
+  <a class="nav-btn nav-next" href="{{ route('attendance.list', ['month' => $nextMonth]) }}">翌月 →</a>
+</div>
     </div>
     <div>
-      <table>
-        <tr>
-          <th>状態</th>
-          <th>名前</th>
-          <th>対象日時</th>
-          <th>申請理由</th>
-          <th>申請日時</th>
-          <th>詳細</th>
-        </tr>
-        <tr>
-          
-        </tr>
-      </table>
+@if($period->count())
+  <table class="month-table">
+    <thead>
+      <tr>
+        <th>日付</th>
+        <th>出勤</th>
+        <th>退勤</th>
+        <th>休憩</th>
+        <th>合計</th>
+        <th>詳細</th>
+      </tr>
+    </thead>
+    <tbody>
+@php
+  // ループの外で1回だけ定義しておけば十分
+  $weekdays = ['日', '月', '火', '水', '木', '金', '土'];
+@endphp
+
+@foreach($period as $date)
+  @php
+    $dateKey = $date->format('Y-m-d');
+
+    $stamp = $stampsByDate[$dateKey] ?? null;
+
+    $restMin = $stamp?->restMinutes() ?? 0;
+    $workMin = ($stamp && $stamp->start_work && $stamp->end_work)
+                ? $stamp->start_work->diffInMinutes($stamp->end_work)
+                : 0;
+  $restHour = intdiv($restMin, 60);
+  $restMinute = $restMin % 60;
+  $restHm = sprintf('%02d:%02d', $restHour, $restMinute);
+
+  // 実労働時間 (分)
+  $netWorkMin = max(0, $workMin - $restMin);
+  $netWorkHour = intdiv($netWorkMin, 60);
+  $netWorkMinute = $netWorkMin % 60;
+  $netWorkHm = sprintf('%02d:%02d', $netWorkHour, $netWorkMinute);
+
+    $week = (int) $date->format('w');
+  @endphp
+  <tr>
+    <td>{{ $date->format('m/d') }}（{{ $weekdays[$week] }}）</td>
+
+    <td>{{ $stamp?->start_work?->format('H:i') ?? '-' }}</td>
+    <td>{{ $stamp?->end_work?->format('H:i') ?? '-' }}</td>
+
+    <td>{{ $stamp ? $restHm : '-' }}</td>
+
+    <td>{{ $stamp ? $netWorkHm : '-' }}</td>
+
+    <td>
+      @if ($stamp)
+        <a href="{{ route('attendance.detail', $stamp->id) }}">詳細</a>
+      @else
+        <div>詳細</div>
+      @endif
+    </td>
+  </tr>
+@endforeach    </tbody>
+  </table>
+@endif
     </div>
   </div>
 </div>
