@@ -21,46 +21,44 @@
       <img class="logo" src="{{ asset('img/COACHTECHlogo.jpg')}}" alt="COACHTECH" >
       </div>
 
-          <nav class="nav" aria-label="メイン">
-            
-      @auth
-        @php 
-          $user = Auth::user();
-        @endphp
+      <div class="nav-wrap">
+        <nav class="nav" aria-label="メイン">
+        @auth
+          @php 
+            $user = Auth::user();
+          @endphp
 
-        @if($user->is_admin)
-          {{-- 管理者メニュー --}}
-          <a href="{{ route('admin.attendance.list') }}">勤怠一覧</a>
-          <a href="{{ route('admin.staff.list') }}">スタッフ一覧</a>
-          <a href="/stamp_correction_request/list">申請一覧</a>
-        @else
-          {{-- スタッフメニュー --}}
-          <a href="/attendance">勤怠</a>
-          <a href="/attendance/list">勤怠一覧</a>
-          <a href="/stamp_correction_request/list">申請</a>
-        @endif
+          @if($user->is_admin)
+            {{-- 管理者メニュー --}}
+            <a href="{{ route('admin.attendance.list') }}">勤怠一覧</a>
+            <a href="{{ route('admin.staff.list') }}">スタッフ一覧</a>
+            <a href="/stamp_correction_request/list">申請一覧</a>
+            <form action="/admin/logout" method="POST">
+              @csrf
+              <input class="logout-form" type="submit" value="ログアウト">
+            </form>
+          @else
+            {{-- スタッフメニュー --}}
+            <a href="/attendance">勤怠</a>
+            <a href="/attendance/list">勤怠一覧</a>
+            <a href="/stamp_correction_request/list">申請</a>
+            <div>
+            <form action="/logout" method="POST">
+              @csrf
+              <input class="logout-form" type="submit" value="ログアウト">
+            </form>
+            </div>
 
-        {{-- 共通：ログアウトリンク --}}
-        <a href="#"
-           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-          ログアウト
-        </a>
-      @endauth
+          @endif
+        @endauth
 
-      @guest
-        {{-- 未ログイン時は何も出さなくてOK --}}
-      @endguest
-    </nav>
+        @guest
+          {{-- 未ログイン時は何も出さなくてOK --}}
+        @endguest
+      </nav>
+    </div>
   </div>
 </header>
-
-{{-- ★ 隠しログアウトフォーム（ヘッダーの「外」に1つだけ） --}}
-@auth
-  <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display:none;">
-    @csrf
-  </form>
-@endauth
-
 
   <div class="content">
   @yield('content')

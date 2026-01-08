@@ -5,34 +5,36 @@
 @endsection
 
 @section('content')
- <div>
-  <div class="list-container">
+<div class="staff-list-wrap">
+  <div class="page-title">
     <h2>スタッフ一覧</h2>
   </div>
-  <div>
-    <table>
-      <thead>
+  <div class="card card-table">
+    <div class="table-wrapper">
+      <table class="staff-table">
+        <thead>
+          <tr>
+            <th>名前</th>
+            <th>メールアドレス</th>
+            <th>月次勤務</th>
+          </tr>
+        </thead>
+        <tbody>
+          @foreach ($staffs as $staff)
+          @if($staff && !$staff->is_admin)
         <tr>
-          <th>名前</th>
-          <th>メールアドレス</th>
-          <th>月次勤務</th>
+          <td>{{ $staff->name }}</td>
+          <td>{{ $staff->email }}</td>
+          <td>
+            <a href="{{ route('admin.attendance.staff.monthly', ['staff' => $staff->id]) }}">詳細</a>
+          </td>
         </tr>
-      </thead>
-      <tbody>
-        @foreach ($staffs as $staff)
-        @if($staff && !$staff->is_admin)
-      <tr>
-        <td>{{ $staff->name }}</td>
-        <td>{{ $staff->email }}</td>
-        <td>
-          <a href="#">詳細</a>
-        </td>
-      </tr>
-      @endif
-      @endforeach
-      </tbody>
+        @endif
+        @endforeach
+        </tbody>
 
-    </table>
+      </table>
+    </div>
   </div>
- </div>
+</div>
 @endsection

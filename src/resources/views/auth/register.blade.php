@@ -14,7 +14,7 @@
       <label for="name" class="register-form__label">名前</label>
       <input type="text" class="register-form__input" name="name" id="name" value="{{ old('name') }}">
       </div>
-         <p class="register-form__error-message">
+        <p class="register-form__error-message">
           @error('name')
           {{ $message }}
           @enderror

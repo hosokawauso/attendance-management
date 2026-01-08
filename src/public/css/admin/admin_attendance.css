@@ -1,0 +1,135 @@
+.detail-wrap {
+  width: 70%;
+}
+
+.page-title {
+  font-size: 30px;
+  font-weight: bold;
+  margin-bottom: 30px;
+  padding-left: 15px;
+  border-left: 8px solid #000000;
+}
+
+.card {
+  background: #fff;
+  border-radius: 10px;
+}
+
+/* テーブルカード */
+.card-table {
+  overflow: hidden;
+  width: 100%;
+}
+
+.table-wrapper {
+  width: 100%;
+}
+
+.detail-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.detail-table th,
+.detail-table td {
+  padding: 5px 16px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.card-table th {
+  background: #fff;
+  color: #666;
+  font-weight: 700;
+  text-align: left;
+  padding: 20px 30px;
+  border-bottom: 2px solid #E1E1E1
+}
+
+.card-table td {
+  padding: 14px 16px;
+  border-bottom: 2px solid #E1E1E1;
+  color: #444;
+  font-weight: 600;
+  text-align: left;
+  width: 60%;
+}
+
+.card-table th.remarks {
+  border-bottom: none;
+}
+
+.card-table tr:last-child td {
+  border-bottom: none;
+}
+
+td.time-range{
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* 均等に広げたいなら */
+  gap: 10px;
+}
+
+.text-cell .remarks-input{
+ width: 140px;
+}
+
+.card-table a {
+  font-weight: 800;
+  color: #111;
+  text-decoration: none;
+}
+
+.card-table a:hover {
+  text-decoration: underline;
+}
+
+.date-year{
+  margin-right: 12px; /* 好きな幅に */
+  display: inline-block;
+}
+
+.detail-footer {
+  margin-top: 40px;
+  display: flex;
+  justify-content: flex-end;
+}
+.correction-btn {
+  width: 100px;
+  height: 40px;
+  color: #fff;
+  background-color: #000000;
+  border: 1px solid #000000;
+  border-radius: 5px;
+}
+
+.card-table input[type="time"]{
+  border: 1px solid #cfcfcf;
+  border-radius: 6px;
+  padding: 6px 10px;
+  background: #fff;
+}
+
+.card-table input[type="text"]{
+  border: 1px solid #cfcfcf;
+  border-radius: 6px;
+  padding: 6px 10px;
+  background: #fff;
+}
+
+.error-message{
+  margin: 6px 0 0;
+  width: 100%;
+  color: red;
+}
+
+
+
+
+
+
+
+
+
+

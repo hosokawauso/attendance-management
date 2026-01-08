@@ -82,7 +82,7 @@ class AttendanceController extends Controller
             return back(); // /attendance を再描画
         }
 
-        // 本日の休憩ログ（見せたいなら）
+        // 本日の休憩ログ
         $rests = $stamp?->rests()->orderBy('start_rest')->get() ?? collect();
 
         $now = now('Asia/Tokyo');

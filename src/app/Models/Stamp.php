@@ -41,6 +41,11 @@ class Stamp extends Model
         return $this->hasMany(Rest::class);
     }
 
+    public function correctionRequests()
+    {
+        return $this->hasMany(AttendanceCorrectRequest::class);
+    }
+
     public function restMinutes(): int
     {
         return $this->rests()

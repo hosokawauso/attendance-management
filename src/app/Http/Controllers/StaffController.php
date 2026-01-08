@@ -9,6 +9,10 @@ use App\Models\Stamp;
 use App\Model\Staff;
 use Carbon\CarbonPeriod;
 use App\Http\Requests\AttendanceUpdateRequest;
+use App\Http\Requests\CorrectRequest;
+use App\Models\AttendanceCorrectRequest;
+use Illuminate\Support\Facades\DB;
+
 
 class StaffController extends Controller
 {
@@ -56,27 +60,24 @@ class StaffController extends Controller
     public function requestIndex(Request $request)
     {
         $staff = Auth::user();
-        $staffId = $staff->id;
 
+        $base = AttendanceCorrectRequest::with('stamp')
+            ->where('staff_id', $staff->id)
+            ->orderByDesc('created_at');
 
-        $pendingStamps = Stamp::where('staff_id', $staffId)
-            ->where('status', Stamp::STATUS_PENDING)
-            ->orderBy('stamp_date', 'desc')
+        $pendingRequests = (clone $base)
+            ->where('status', AttendanceCorrectRequest::STATUS_PENDING)
             ->get();
 
-
-        $approvedStamps = Stamp::where('staff_id', $staffId)
-            ->where('status', Stamp::STATUS_APPROVED)
-            ->orderBy('stamp_date', 'desc')
+        $approvedRequests = (clone $base)
+            ->where('status', AttendanceCorrectRequest::STATUS_APPROVED)
             ->get();
 
-
-        return view('staff.stamp_correction_request', compact(
-            'pendingStamps',
-            'approvedStamps',
-            'staff'
+        return view('stamp_correction_request', compact(
+            'pendingRequests',
+            'approvedRequests',
+            'staff',
         ));
-
     }
 
     public function detail($id)
@@ -88,67 +89,82 @@ class StaffController extends Controller
             ->where('staff_id', $staff->id)
             ->firstOrFail();
 
-        $stamp->load('rests');
-        $rests = $stamp->rests;
+        $stamp->load(['rests' => function ($q) {
+            $q->orderBy('start_rest');
+        }]);
 
-        return view('staff.attendance_detail', compact('staff', 'stamp', 'rests'));
+        $rests = $stamp->rests->values();
+
+        $latestReq = AttendanceCorrectRequest::where('stamp_id', $stamp->id)
+            ->orderByDesc('created_at')
+            ->first();
+
+        return view('staff.attendance_detail', compact(
+            'staff',
+            'stamp',
+            'rests',
+            'latestReq',
+        ));
     }
 
-    public function update(AttendanceUpdateRequest $request, Stamp $stamp)
+    public function attendanceCorrectionRequestStore(AttendanceUpdateRequest $request, Stamp $stamp)
     {
         $staff = Auth::user();
+        abort_unless($stamp->staff_id === $staff->id, 403);
 
-        if ($stamp->staff_id !== $staff->id) {
-        abort(403);
+        $hasPending = AttendanceCorrectRequest::where('stamp_id', $stamp->id)
+            ->where('status', AttendanceCorrectRequest::STATUS_PENDING)
+            ->exists();
+
+        if ($hasPending) {
+            return back()->with('error', '承認待ちのため修正できません。');
         }
 
         $validated = $request->validated();
+        $restInputs = $validated['rests'] ?? [];
 
-        if(!empty($validated['start_work'])) {
-            $stamp->start_work = $stamp->stamp_date
-                ->copy()
-                ->setTimeFromTimeString($validated['start_work']);
-        } else {
-            $stamp->start_work = null;
-        }
-
-        if(!empty($validated['end_work'])) {
-            $stamp->end_work = $stamp->stamp_date
-                ->copy()
-                ->setTimeFromTimeString($validated['end_work']);
-        } else {
-            $stamp->end_work = null;
-        }
-
-        $stamp->remarks = $validated['remarks'] ?? null;
-        $stamp->save();
-
-        $restInputs = $validated['rests'] ?? null;
-
-        if (!is_array($restInputs)) {
-            $restInputs = [];
-        }
-
-        foreach($restInputs as $row) {
-            $start = $row['start'] ?? null;
-            $end = $row['end'] ?? null;
-
-            if(!$start && !$end) {
-                continue;
-            }
-
-            $stamp->rests()->create([
-                'stamp_date' => $stamp->stamp_date,
-                'start_rest' => $start,
-                'end_rest' => $end,
+        DB::transaction(function () use  ($validated, $restInputs,$stamp, $staff) {
+            $req = AttendanceCorrectRequest::create([
+                'stamp_id' => $stamp->id,
+                'staff_id' => $staff->id,
+                'status'    => AttendanceCorrectRequest::STATUS_PENDING,
+                'requested_start_work' => $validated['start_work'] ?? null,
+                'requested_end_work'   => $validated['end_work'] ?? null,
+                'requested_remarks'    => $validated['remarks'],
             ]);
-        }
 
-        $stamp->status = Stamp::STATUS_PENDING;
-        $stamp->save();
+            foreach ($restInputs as $i => $row) {
+                $start = $row['start'] ?? null;
+                $end   = $row['end'] ?? null;
 
-        return redirect()
-            ->route('attendance.detail', $stamp->id);
+                if (!$start && !$end) {
+                    continue;
+                }
+
+                $req->rests()->create([
+                    'requested_start_rest' => $start,
+                    'requested_end_rest'   => $end,
+                    'sort_order'           => $i,
+                ]);
+            }
+        });
+
+        return redirect('/stamp_correction_request/list');
+    }
+
+    public function requestShow(CorrectRequest $attendance_correct_request)
+    {
+        $staff = Auth::user();
+
+        abort_unless($attendance_correct_request->staff_id === $staff->id, 403);
+
+        $attendance_correct_request->load('stamp');
+
+        return view('stamp_correction_request_detail',[
+        'staff' => $staff,
+        'req' => $attendance_correct_request,
+
+    ]);
 
     }
 }

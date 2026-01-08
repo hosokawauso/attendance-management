@@ -29,4 +29,9 @@ class Rest extends Model
         return $this->belongsTo(Stamp::class);
     }
 
+    public function rests()
+    {
+        return $this->hasMany(Rest::class);
+    }
+
 }

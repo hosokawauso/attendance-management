@@ -7,8 +7,8 @@
 @section('content')
 <div class="list-container">
   <h2 class="page-title">申請一覧</h2>
-  <div>
-    <div class="top__tabs">
+  <div class="container-wrap">
+    <div class="top-tabs">
       <button type="button" class="tab-btn is-active" data-tab="pending">
         承認待ち
       </button>
@@ -18,7 +18,7 @@
     </div>
 
     <div id="tab-pending" class="tab-panel is-active">
-      <table>
+      <table class="correction-request-table">
         <thead>
           <tr>
             <th>状態</th>
@@ -30,27 +30,32 @@
           </tr>
         </thead>
         <tbody>
-          @forelse($pendingStamps as $stamp)
+          @foreach($pendingRequests as $req)
           <tr>
-            <td>{{ $stamp->approved ? '承認済み' : '承認待ち' }}</td>
-            <td>{{ $stamp->staff->name ?? '-' }}</td>
-            <td>{{ $stamp->stamp_date?->format('Y-m-d') ?? '-' }}</td>
-            <td>{{ $stamp->remarks ?? '-' }}</td>
-            <td>{{ $stamp->created_at?->format('Y-m-d') ?? '-' }}</td>
-            <td><a href="/attendance/detail/{{$stamp->id}}">詳細</a></td>
-          </tr>
-          @empty
-            <tr>
-              <td>承認待ちの申請はありません。</td>
+            <td>承認待ち</td>
+            <td>{{ $req->staff->name ?? '-' }}</td>
+            <td>{{ $req->stamp?->stamp_date?->format('Y-m-d') ?? '-' }}</td>
+            <td>{{ $req->requested_remarks ?? '-' }}</td>
+            <td>{{ $req->created_at?->format('Y-m-d') ?? '-' }}</td>
+            @php
+              $isAdmin = Auth::user()->is_admin;
+            @endphp
+              <td>
+                @if($isAdmin)
+                  <a href="{{ route('stamp_correction_request.show', ['attendance_correct_request' => $req->id]) }}">詳細</a>
+                @else
+                  <a href="{{ route('attendance.detail', ['stamp' => $req->stamp_id]) }}">詳細</a>
+                @endif
+              </td>
             </tr>
-          @endforelse
+          @endforeach
         </tbody>
       </table>
     </div>
 
 
     <div id="tab-approved" class="tab-panel">
-    <table>
+    <table class="correction-request-table">
       <thead>
         <tr>
           <th>状態</th>
@@ -62,14 +67,23 @@
         </tr>
       </thead>
       <tbody>
-        @forEach($approvedStamps as $stamp)
+        @foreach($approvedRequests as $req)
           <tr>
-            <td>{{ $stamp->approved ? '承認済み' : '承認待ち' }}</td>
-            <td>{{ $stamp->staff->name ?? '-' }}</td>
-            <td>{{ $stamp->stamp_date?->format('Y-m-d') ?? '-' }}</td>
-            <td>{{ $stamp->remarks ?? '-' }}</td>
-            <td>{{ $stamp->created_at?->format('Y-m-d') ?? '-' }}</td>
-            <td><a href="/attendance/detail/{{$stamp->id}}">詳細</a></td>
+            <td>承認済み</td>
+            <td>{{ $req->staff->name ?? '-' }}</td>
+            <td>{{ $req->stamp?->stamp_date?->format('Y-m-d') ?? '-' }}</td>
+            <td>{{ $req-> requested_remarks ?? '-' }}</td>
+            <td>{{ $req->created_at?->format('Y-m-d') ?? '-' }}</td>
+            @php
+              $isAdmin = Auth::user()->is_admin;
+            @endphp
+              <td>
+                @if($isAdmin)
+                  <a href="{{ route('stamp_correction_request.show', ['attendance_correct_request' => $req->id]) }}">詳細</a>
+                @else
+                  <a href="{{ route('attendance.detail', ['stamp' => $req->stamp_id]) }}">詳細</a>
+                @endif
+              </td>
           </tr>
         @endforeach
       </tbody>

@@ -7,15 +7,60 @@
 
 .logo-space {
   width: 50%;
+  height: 80px;
+  display: flex;
+  align-items: center;
 }
 
 
 .logo {
-  width: 100%;
+  display: block;            
+  height: auto;
+  max-height: 70%;
 }
 
-.nav a {
+.nav-wrap {
+    padding-left: 20px;
+}
+
+nav {
+  display: flex;
+  align-items: center;
+}
+
+.nav > a,
+.nav > form,
+.nav > div {
+  display: inline-flex;
+  align-items: center;
+}
+
+.nav a,
+.nav .logout-form {
   color: #fff;
   text-decoration: none;
-  font-size: bold;
+  font-size: 24px;
+  font-weight: bold;
+  padding-right: 50px;  
+  cursor: pointer;
+}
+
+.nav a:hover,
+.nav .logout-form:hover {
+  opacity: 0.7;
+}
+
+.nav form {
+  margin-left: auto;
+}
+
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: #fff; 
 }

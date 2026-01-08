@@ -29,6 +29,8 @@ class AttendanceUpdateRequest extends FormRequest
             'rests.*.start' => ['nullable', 'date_format:H:i'],
             'rests.*.end' => ['nullable', 'date_format:H:i'],
             'remarks' => ['required', 'string', 'max:255'],
+            'rests.*.requested_start_rest' => ['nullable','date_format:H:i'],
+            'rests.*.requested_end_rest'   => ['nullable','date_format:H:i'],
         ];
     }
 

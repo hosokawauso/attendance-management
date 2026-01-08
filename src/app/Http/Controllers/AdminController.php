@@ -8,11 +8,24 @@ use App\Models\Staff;
 use App\Models\Stamp;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
+use App\Http\Requests\AdminLoginRequest;
 use App\Http\Requests\AdminAttendanceUpdateRequest;
 
 
 class AdminController extends Controller
 {
+    public function login(AdminLoginRequest $request)
+    {
+        if(!Auth::attempt($request->validated())){
+            $request->session()->regenerate();
+            return redirect()->intended('/admin/login');
+        }
+
+        return back()->withErrors([
+            'email' => 'ログイン情報が登録されていません'
+        ])->withInput();
+    }
+
     public function attendanceList(Request $request)
     {
 
@@ -56,6 +69,50 @@ class AdminController extends Controller
         return view('admin.staff_list', compact('staffs'));
     }
 
+    public function staffMonthly(Request $request, Staff $staff)
+    {
+        abort_unless(Auth::user()?->is_admin, 403);
+
+        $monthParam = $request->query('month', now('Asia/Tokyo')->format('Y-m'));
+        try {
+        $month = Carbon::createFromFormat('Y-m', $monthParam, 'Asia/Tokyo')->startOfMonth();
+        } catch (\Throwable $e) {
+            $month = now('Asia/Tokyo')->startOfMonth();
+        }
+
+        $start = $month->copy()->startOfMonth();
+        $end = $month->copy()->endOfMonth();
+
+        $prevMonth = $month->copy()->subMonth()->format('Y-m');
+        $nextMonth = $month->copy()->addMonth()->format('Y-m');
+
+        $monthlyStamps = Stamp::with('rests')
+            ->where('staff_id', $staff->id)
+            ->whereBetween('stamp_date', [$start->toDateString(), $end->toDateString()])
+            ->orderBy('stamp_date')
+            ->get();
+
+        $stampsByDate = $monthlyStamps->keyBy(function ($stamp) {
+            if ($stamp->stamp_date instanceof \Carbon\Carbon) {
+                return $stamp->stamp_date->toDateString();
+            }
+
+            return (string) $stamp->stamp_date;
+        });
+
+        $period = CarbonPeriod::create($start,$end);
+
+        return view('admin.admin_attendance_staff', compact(
+            'staff',
+            'month',
+            'period',
+            'stampsByDate',
+            'prevMonth',
+            'nextMonth',
+        ));
+
+    }
+
     public function detail(Stamp $stamp)
     {
         $stamp->load('staff', 'rests');
@@ -72,7 +129,8 @@ class AdminController extends Controller
         ));
     }
 
-        public function update(AdminAttendanceUpdateRequest $request, Stamp $stamp)
+
+    public function update(AdminAttendanceUpdateRequest $request, Stamp $stamp)
     {
         $admin = Auth::user();
 
@@ -119,7 +177,7 @@ class AdminController extends Controller
         }
 
         return redirect()
-            ->route('admin.attendance.detail', $stamp->id);
+            ->route('admin.attendance.show', $stamp->id);
 
     }
 

@@ -9,10 +9,8 @@
   <div class="page-title" >
     <h2>勤怠詳細</h2>
   </div>
-  <form action="{{ route('attendance.update', $stamp->id)}}" method="POST">
+  <form action="{{ route( 'attendance.request', $stamp->id )}}" method="POST">
     @csrf
-    @method('PUT')
-
     <table class="detail-table">
       <tr>
         <th>名前</th>
@@ -50,11 +48,11 @@
           <td>
             <input type="time"
                   name="rests[{{ $i }}][start]"
-                  value="{{ $rest && $rest->start_rest ? substr($rest->start_rest, 0, 5) : '' }}">
+                  value="{{  $rest?->start_rest?->format('H:i') ?? '' }}">
                   ～
             <input type="time"
                   name="rests[{{ $i }}][end]"
-                  value="{{ $rest && $rest->end_rest ? substr($rest->end_rest, 0, 5) : '' }}">
+                  value="{{ $rest?->end_rest?->format('H:i') ?? '' }}">
           </td>
         </tr>
       @endfor
@@ -73,15 +71,20 @@
         </tr>
     </table>
     <div class="detail-footer">
-      @if ($stamp->status === \App\Models\Stamp::STATUS_UNAPPROVED)
+      @php
+        $reqStatus = $latestReq->status ?? null;
+      @endphp
+
+      @if (is_null($reqStatus))
         <button type="submit" class="correction-btn">修正</button>
-      @elseif($stamp->status === \App\Models\Stamp::STATUS_PENDING)
+      @elseif($reqStatus === \App\Models\AttendanceCorrectRequest::STATUS_PENDING)
           <p class="pending-message">*承認待ちのため修正はできません。</p>
-      @elseif ($stamp->status === \App\Models\Stamp::STATUS_APPROVED)
+      @elseif ($reqStatus === \App\Models\AttendanceCorrectRequest::STATUS_APPROVED)
       <p class="approved-message">*承認済みのため修正できません。</p>
       @endif
     </div>
 
   </form>
+
 </div>
 @endsection

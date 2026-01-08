@@ -1,49 +1,52 @@
 @extends('layouts.app')
 
 @section('css')
-    
+<link rel="stylesheet" href="{{ asset('css/admin/admin_attendance_list.css')}}">
 @endsection
 
 @section('content')
   <div class="admin-attendance-wrap">
 
   {{-- タイトル --}}
-  <h1 class="list-container">
+  <h1 class="page-title">
     {{ $date->translatedFormat('Y年n月j日') }}の勤怠
   </h1>
 
   {{-- 日付ナビ --}}
-  <div class="top-tabs">
-    <a class="date-nav__btn"
-       href="{{ route('admin.attendance.list', ['date' => $prevDate->toDateString()]) }}">
-      ← 前日
-    </a>
+  <div class="card card-nav">
+    <div class="top-tabs">
+      <a class="date-nav__btn"
+        href="{{ route('admin.attendance.list', ['date' => $prevDate->toDateString()]) }}">
+        ← 前日
+      </a>
 
-    <div class="nav-center">
-      <span class="nav-icon">📅</span>
-      <span class="nav-date">{{ $date->format('Y/m/d') }}</span>
+      <div class="nav-center">
+        <span class="nav-icon">📅</span>
+        <span class="nav-date">{{ $date->format('Y/m/d') }}</span>
+      </div>
+
+      <a class="date-nav__btn"
+        href="{{ route('admin.attendance.list', ['date' => $nextDate->toDateString()]) }}">
+        翌日 →
+      </a>
     </div>
-
-    <a class="date-nav__btn"
-       href="{{ route('admin.attendance.list', ['date' => $nextDate->toDateString()]) }}">
-      翌日 →
-    </a>
   </div>
 
-  <div class="table-wrapper">
-    @if($stamps->count())
-      <table class="month-table">
-        <thead>
-          <tr>
-            <th>名前</th>
-            <th>出勤</th>
-            <th>退勤</th>
-            <th>休憩</th>
-            <th>合計</th>
-            <th>詳細</th>
-          </tr>
-        </thead>
-        <tbody>
+  <div class="card card-table">
+    <div class="table-wrapper">
+      @if($stamps->count())
+        <table class="month-table">
+          <thead>
+            <tr>
+              <th>名前</th>
+              <th>出勤</th>
+              <th>退勤</th>
+              <th>休憩</th>
+              <th>合計</th>
+              <th>詳細</th>
+            </tr>
+          </thead>
+          <tbody>
 
           @foreach($stamps as $stamp)
             @php
@@ -64,11 +67,11 @@
           @endphp
 
           <tr>
-            <td>{{ $stamp?->staff?->name ?? '-' }}</td>
-            <td>{{ $stamp?->start_work?->format('H:i') ?? '-' }}</td>
-            <td>{{ $stamp?->end_work?->format('H:i') ?? '-' }}</td>
-            <td>{{ $stamp ? $restHm : '-' }}</td>
-            <td>{{ $stamp ? $netWorkHm : '-' }}</td>
+            <td>{{ $stamp?->staff?->name ?? ' ' }}</td>
+            <td>{{ $stamp?->start_work?->format('H:i') ?? ' ' }}</td>
+            <td>{{ $stamp?->end_work?->format('H:i') ?? ' ' }}</td>
+            <td>{{ $stamp ? $restHm : ' ' }}</td>
+            <td>{{ $stamp ? $netWorkHm : ' ' }}</td>
             <td>
               @if ($stamp)
                 <a href="{{ route('admin.attendance.detail', $stamp->id) }}">詳細</a>
@@ -77,11 +80,11 @@
               @endif
             </td>
           </tr>
-        @endforeach    
+        @endforeach
           </tbody>
-          </table>
-        @endif
-          </div>
-
-        </div>
-        @endsection
+        </table>
+          @endif
+    </div>
+  </div>
+</div>
+@endsection

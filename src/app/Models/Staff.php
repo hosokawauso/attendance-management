@@ -34,4 +34,9 @@ class Staff extends Authenticatable
         return $this->hasMany(Stamp::class);
     }
 
+    public function correctionRequests()
+    {
+        return $this->hasMany(AttendanceCorrectRequest::class);
+    }
+
 }

@@ -1,22 +1,20 @@
 @extends('layouts.app')
 
 @section('css')
-<link rel="stylesheet" href="{{ asset('css/attendance_list.css') }}">
+<link rel="stylesheet" href="{{ asset('css/admin/admin_attendance_staff.css') }}">
 @endsection
 
 @section('content')
 <div class="attendance-wrap">
 
-<h2 class="page-title">勤怠一覧</h2>
+<h2 class="page-title">{{ $staff->name }}さんの勤怠一覧</h2>
   <div class="top-tabs">
-    <a class=" nav-btn" href="{{ route('attendance.list', ['month' => $prevMonth]) }}">← 前月</a>
-
+      <a class="nav-btn" href="{{ route('admin.attendance.staff.monthly', ['staff' => $staff->id, 'month' => $prevMonth]) }}">← 前月</a>
     <div class="nav-center">
       <span class="nav-icon" aria-hidden="true">📅</span>
       <strong>{{ $month->format('Y') }}/{{ $month->format('m') }}</strong>
     </div>
-
-    <a class="nav-btn nav-next" href="{{ route('attendance.list', ['month' => $nextMonth]) }}">翌月 →</a>
+    <a class="nav-btn nav-next" href="{{ route('admin.attendance.staff.monthly', ['staff' => $staff->id, 'month' => $nextMonth]) }}">翌月 →</a>
   </div>
 
   <div class="card card-table">
@@ -47,8 +45,8 @@
 
               $restMin = $stamp?->restMinutes() ?? 0;
               $workMin = ($stamp && $stamp->start_work && $stamp->end_work)
-                      ? $stamp->start_work->diffInMinutes($stamp->end_work)
-                      : 0;
+                          ? $stamp->start_work->diffInMinutes($stamp->end_work)
+                          : 0;
               $restHour = intdiv($restMin, 60);
               $restMinute = $restMin % 60;
               $restHm = sprintf('%02d:%02d', $restHour, $restMinute);
@@ -61,6 +59,7 @@
 
               $week = (int) $date->format('w');
             @endphp
+
             <tr>
               <td>{{ $date->format('m/d') }}（{{ $weekdays[$week] }}）</td>
 
@@ -73,7 +72,7 @@
 
               <td>
                 @if ($stamp)
-                  <a href="{{ route('attendance.detail', $stamp->id) }}">詳細</a>
+                  <a href="{{ route('admin.attendance.detail', ['stamp' => $stamp->id]) }}">詳細</a>
                 @else
                   <div>詳細</div>
                 @endif

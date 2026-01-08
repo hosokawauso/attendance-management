@@ -1,0 +1,118 @@
+.detail-wrap {
+  width: 60%;
+}
+
+.page-title {
+  font-size: 30px;
+  font-weight: bold;
+  margin-bottom: 30px;
+  padding-left: 15px;
+  border-left: 8px solid #000000;
+}
+
+.card {
+  background: #fff;
+  border-radius: 10px;
+}
+
+/* テーブルカード */
+.card-table {
+  overflow: hidden;
+  width: 100%;
+}
+
+.table-wrapper {
+  width: 100%;
+}
+
+.detail-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.detail-table th,
+.detail-table td {
+  padding: 5px 16px;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 16px;
+}
+
+.card-table th {
+  background: #fff;
+  color: #737373;
+  font-weight: 700;
+  text-align: left;
+  padding: 20px 30px;
+  border-bottom: 2px solid #E1E1E1
+}
+
+.card-table td {
+  padding: 14px 16px;
+  border-bottom: 2px solid #E1E1E1;
+  color: #000000;
+  font-weight: bold;
+  text-align: left;
+  width: 60%;
+}
+
+.card-table th.remarks {
+  border-bottom: none;
+}
+
+.card-table tr:last-child td {
+  border-bottom: none;
+}
+
+td.time-range {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /* 均等に広げたいなら */
+  gap: 10px;
+}
+
+.date-year {
+  margin-right: 12px;
+  display: inline-block;
+}
+
+.detail-footer {
+  margin-top: 40px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.approve-btn {
+  min-width: 140px;
+  height: 48px;
+  border-radius: 5px;
+  font-size: 22px;
+  font-weight: bold;
+  line-height: 1;
+  letter-spacing: 0.15rem;
+
+  border: none;
+  cursor: pointer;
+}
+
+.approve-btn.is-pending {
+  background: #000000;
+  color: #FFFFFF;
+}
+
+.approve-btn.is-approved {
+  background: #696969;
+  color: #FFFFFF;
+  cursor: non-allowed;
+  opacity: 1;
+}
+
+.approve-btn:disabled {
+  opacity: 1;
+}
+
+.approve-btn.is-pending:hover {
+  opacity: 0.85;
+}
