@@ -9,7 +9,6 @@ class AttendanceCorrectRequest extends Model
 {
     use HasFactory;
 
-    const STATUS_UNAPPROVED = 0; //未申請
     const STATUS_PENDING    = 1; //承認待ち
     const STATUS_APPROVED   = 2; //承認済み
 
@@ -20,6 +19,7 @@ class AttendanceCorrectRequest extends Model
         'requested_start_work',
         'requested_end_work',
         'requested_remarks',
+        'admin_comment',
         'approved_by',
         'approved_at',
     ];

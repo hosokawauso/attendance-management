@@ -23,8 +23,6 @@ class CreateStampsTable extends Migration
             $table->date('stamp_date')->index();
             $table->time('start_work')->nullable();
             $table->time('end_work')->nullable();
-            $table->unsignedInteger('total_work')->default(0);;
-            $table->tinyInteger('status')->unsigned()->default(0)->comment('0:未承認, 1:承認待ち, 2:承認済み');
             $table->string('remarks')->nullable();
             $table->timestamps();
 

@@ -23,7 +23,7 @@ Route::get('/admin/login', function () {
     return view('auth.admin_login');
 })->middleware('guest')->name('admin.login');
 
-Route::post('/admin/login', [AdminAuthController::class, 'login'])
+Route::post('/admin/login', [AdminController::class, 'login'])
     ->middleware('guest')
     ->name('admin.login.confirm');
 

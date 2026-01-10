@@ -21,9 +21,7 @@ class AdminController extends Controller
             return redirect()->intended('/admin/login');
         }
 
-        return back()->withErrors([
-            'email' => 'ログイン情報が登録されていません'
-        ])->withInput();
+        return redirect()->route('admin.attendance.list');
     }
 
     public function attendanceList(Request $request)

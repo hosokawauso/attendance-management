@@ -15,8 +15,11 @@ class CreateAttendanceCorrectRequestRestsTable extends Migration
     {
         Schema::create('attendance_correct_request_rests', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('attendance_correct_request_id')->constrained('attendance_correct_requests')->cascadeOnDelete();
-
+            $table->unsignedBigInteger('attendance_correct_request_id');
+            $table->foreign('attendance_correct_request_id', 'acr_rests_acr_id_fk')
+                ->references('id')
+                ->on('attendance_correct_requests')
+                ->onDelete('cascade');
             $table->time('requested_start_rest')->nullable();
             $table->time('requested_end_rest')->nullable();
 

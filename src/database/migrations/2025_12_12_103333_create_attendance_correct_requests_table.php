@@ -15,23 +15,24 @@ class CreateAttendanceCorrectRequestsTable extends Migration
     {
         Schema::create('attendance_correct_requests', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('stamp_id')->constrained('stamps')->cascadedOnDeleted();
-            $table->foreignId('staff_id')->constrained('staffs')->cascadedOnDelete();
+            $table->foreignId('stamp_id')->constrained('stamps')->cascadeOnDeleted();
+            $table->foreignId('staff_id')->constrained('staffs')->cascadeOnDelete();
 
-            // 0:未申請, 1:承認待ち, 3:承認済み
+            // 1:承認待ち, 2:承認済み
             $table->unsignedTinyInteger('status')->default(0);
 
              // 申請したい内容
-            $table->time('requested_start_work');
-            $table->time('requested_end_work');
+            $table->time('requested_start_work')->nullable();
+            $table->time('requested_end_work')->nullable();
             $table->string('requested_remarks', 255);
+            $table->string('admin_comment', 255);
 
             $table->foreignId('approved_by')->nullable()->constrained('staffs')->nullOnDelete();
             $table->timestamp('approved_at')->nullable();
 
             $table->timestamps();
 
-            $table->unique(['stamp_id', 'status']);
+            $table->unique('stamp_id');
         });
     }
 
