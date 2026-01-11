@@ -65,6 +65,6 @@
   <div class="container">
   </div>
   </div>
-  @stack('script')
+  @stack('scripts')
 </body>
 </html>

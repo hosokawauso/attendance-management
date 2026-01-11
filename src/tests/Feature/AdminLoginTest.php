@@ -62,7 +62,7 @@ class AdminLoginTest extends TestCase
             'email' => 'adminreal@example.com',
         ]);
 
-        $response = $this->from('/login')->post('/login', [
+        $response = $this->from('/admin/login')->post('/admin/login', [
             'email' => 'adminwrong@example.com',
             'password' => 'password123',
         ]);

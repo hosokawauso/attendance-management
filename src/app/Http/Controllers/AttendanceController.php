@@ -16,13 +16,15 @@ class AttendanceController extends Controller
         [$state, $stamp] = $this->calcState();
 
         if ($request->isMethod('post')) {
-            $action  = $request->input('action'); // clock-in / break-start / break-end / clock-out
+            $action  = $request->input('action');
+
             $allowed = [
                 'idle'     => ['clock-in'],
-                'working'  => ['break-start','clock-out'],
-                'on_break' => ['break-end'],
+                'working'  => ['rest-start','clock-out'],
+                'on_rest' => ['rest-end'],
                 'finished' => [],
             ];
+
             abort_unless(in_array($action, $allowed[$state] ?? [], true), 409, 'invalid transition');
 
             DB::transaction(function () use ($action, &$stamp) {
@@ -43,20 +45,20 @@ class AttendanceController extends Controller
                     return;
                 }
 
-                if ($action === 'break-start') {
+                if ($action === 'rest-start') {
                     // 未クローズの休憩がないことを保証
                     $open = $stamp->rests()->whereNull('end_rest')->exists();
-                    if ($open) abort(409, 'break already started');
+                    if ($open) abort(409, 'rest already started');
                     $stamp->rests()->create([
-                        'stamp_date' => $date,
+                        /* 'stamp_date' => $date, */
                         'start_rest' => $now,
                     ]);
                     return;
                 }
 
-                if ($action === 'break-end') {
+                if ($action === 'rest-end') {
                     $rest = $stamp->rests()->whereNull('end_rest')->latest('start_rest')->first();
-                    if (!$rest) abort(409, 'no open break');
+                    if (!$rest) abort(409, 'no open rest');
                     $rest->end_rest = $now;
                     $rest->save();
                     return;
@@ -65,14 +67,14 @@ class AttendanceController extends Controller
                 if ($action === 'clock-out') {
                     // 休憩中は退勤不可
                     $open = $stamp->rests()->whereNull('end_rest')->exists();
-                    if ($open) abort(409, 'break not ended');
+                    if ($open) abort(409, 'rest not ended');
 
                     $stamp->end_work = $now;
 
                     // 合計計算（分）
                     $work = Carbon::parse($stamp->start_work)->diffInMinutes($stamp->end_work);
                     $rest = $stamp->restMinutes();
-                    $stamp->total_work = max(0, $work - $rest);
+                    /* $stamp->total_work = max(0, $work - $rest); */
 
                     $stamp->save();
                     return;
@@ -106,7 +108,7 @@ class AttendanceController extends Controller
         if (!$stamp || !$stamp->start_work) return ['idle', $stamp];
         if ($stamp->end_work) return ['finished', $stamp];
 
-        $openBreak = $stamp->rests()->whereNull('end_rest')->exists();
-        return $openBreak ? ['on_break', $stamp] : ['working', $stamp];
+        $openRest = $stamp->rests()->whereNull('end_rest')->exists();
+        return $openRest ? ['on_rest', $stamp] : ['working', $stamp];
     }
 }

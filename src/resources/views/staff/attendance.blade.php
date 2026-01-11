@@ -16,7 +16,7 @@
       {{ $now->locale('ja')->isoFormat('YYYY年MM月DD日(ddd)')}}
     </div>
     <div class="current-time" id="current-time">
-      {{-- {{ $now->format('H:i') }} --}}
+      {{ $now->format('H:i') }}
     </div>
 
     <form method="POST" action="{{ route('attendance') }}">
@@ -34,7 +34,7 @@
       {{ $now->locale('ja')->isoFormat('YYYY年MM月DD日(ddd)')}}
     </div>
     <div class="current-time" id="current-time">
-      {{--     {{ $now->format('H:i') }}    --}}  
+      {{ $now->format('H:i') }}
     </div>
 
     <form method="POST" action="{{ route('attendance') }}">
@@ -44,11 +44,11 @@
 
     <form method="POST" action="{{ route('attendance') }}">
       @csrf
-      <button name="action" value="break-start">休憩入</button>
+      <button name="action" value="rest-start">休憩入</button>
     </form>
   </div>
 
-  @elseif ($state === 'on_break')
+  @elseif ($state === 'on_rest')
   <div class="timestamp">
     <div class="status">
       休憩中
@@ -57,12 +57,12 @@
       {{ $now->locale('ja')->isoFormat('YYYY年MM月DD日(ddd)')}}
     </div>
     <div class="current-time" id="current-time">
-      {{--     {{ $now->format('H:i') }}    --}}  
+      {{ $now->format('H:i') }}
     </div>
 
     <form method="POST" action="{{ route('attendance') }}">
       @csrf
-      <button name="action" value="break-end">休憩戻</button>
+      <button name="action" value="rest-end">休憩戻</button>
     </form>
   </div>
 
@@ -76,32 +76,38 @@
       {{ $now->locale('ja')->isoFormat('YYYY年MM月DD日(ddd)')}}
     </div>
     <div class="current-time" id="current-time">
-      {{--     {{ $now->format('H:i') }}   --}}  
+      {{ $now->format('H:i') }}
     </div>
 
     <p>お疲れさまでした。</p>
   </div>
-  
+
   @endif
 </div>
 
-@push('script')
+@push('scripts')
   <script>
     (function () {
-      function showCurrentTime() {
-        const time = document.getElementById('current-time');
-        if(!time) return;
+      const time = document.getElementById('current-time');
+      if(!time) return;
 
+      function showCurrentTime() {
         const now = new Date();
         const nowHours = String(now.getHours()).padStart(2, '0');
         const nowMinutes = String(now.getMinutes()).padStart(2, '0');
-        const s = String(now.getSeconds()).padStart(2, '0');
 
         time.textContent = `${nowHours}:${nowMinutes}`;
       }
+
       showCurrentTime();
 
-      setInterval(showCurrentTime, 1000)
+      const now = new Date();
+      const NextMinute = (60 - now.getSeconds()) * 1000 - now.getMilliseconds();
+
+      setTimeout(() => {
+        showCurrentTime();
+        setInterval(showCurrentTime, 60 * 1000);
+      }, NextMinute);
     })();
   </script>
 @endpush

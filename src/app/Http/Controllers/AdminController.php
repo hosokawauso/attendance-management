@@ -15,14 +15,17 @@ use App\Http\Requests\AdminAttendanceUpdateRequest;
 class AdminController extends Controller
 {
     public function login(AdminLoginRequest $request)
-    {
-        if(!Auth::attempt($request->validated())){
-            $request->session()->regenerate();
-            return redirect()->intended('/admin/login');
-        }
-
-        return redirect()->route('admin.attendance.list');
+{
+    if (!Auth::attempt($request->validated())) {
+        return back()
+            ->withErrors(['email' => 'ログイン情報が登録されていません。'])
+            ->withInput();
     }
+
+    $request->session()->regenerate();
+
+    return redirect()->route('admin.attendance.list');
+}
 
     public function attendanceList(Request $request)
     {

@@ -1,101 +1,100 @@
-.attendance{
-  /* min-height: calc(100vh - 80px); */
-  display: grid;
-  place-items: center;
-  margin-top: 100px;
-  padding: 40px 16px;
+.attendance {
+    /* min-height: calc(100vh - 80px); */
+    display: grid;
+    place-items: center;
+    margin-top: 100px;
+    padding: 40px 16px;
 }
 
 /* 中身を縦に積む */
-.attendance > *{
-  text-align: center;
+.attendance > * {
+    text-align: center;
 }
 
 /* 上の小さい状態バッジ */
-.attendance .status{
-  display: inline-block;
-  padding: 6px 14px;
-  border-radius: 50px;
-  background: #cfcfcf;
-  color: #696969;
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 40px;
-  line-height: 1;
-  letter-spacing: 0.15em;
-
+.attendance .status {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 50px;
+    background: #cfcfcf;
+    color: #696969;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 40px;
+    line-height: 1;
+    letter-spacing: 0.15em;
 }
 
 /* 日付 */
-.attendance .date{
-  font-size: 40px;
-  font-weight: 400;
-  line-height: 1;
-  margin-bottom: 14px;
+.attendance .date {
+    font-size: 40px;
+    font-weight: 400;
+    line-height: 1;
+    margin-bottom: 14px;
 }
 
 /* 時刻（太く大きく） */
-.attendance .current-time{
-  font-size: 80px;
-  font-weight: bold;
-  letter-spacing: 2px;
-  margin-bottom: 100px;
+.attendance .current-time {
+    font-size: 80px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    margin-bottom: 100px;
 }
 
 /* ボタンエリア（共通） */
-.attendance form{
-  display: inline-block;
+.attendance form {
+    display: inline-block;
 }
 
 /* ボタン共通 */
-.attendance button{
-  width: 221px;
-  height: 77px;
-  border-radius: 20px;
-  font-size: 32px;
-  font-weight: bold;
-  line-height: 1;
-  letter-spacing: 0.15em;
-  border: 1px solid transparent;
-  cursor: pointer;
+.attendance button {
+    width: 221px;
+    height: 77px;
+    border-radius: 20px;
+    font-size: 32px;
+    font-weight: bold;
+    line-height: 1;
+    letter-spacing: 0.15em;
+    border: 1px solid transparent;
+    cursor: pointer;
 }
 
 /* 黒ボタン（出勤・退勤） */
 .attendance button[value="clock-in"],
-.attendance button[value="clock-out"]{
-  background: #000;
-  color: #fff;
+.attendance button[value="clock-out"] {
+    background: #000;
+    color: #fff;
 }
 
 /* 白ボタン（休憩系） */
-.attendance button[value="break-start"],
-.attendance button[value="break-end"]{
-  background: #fff;
-  color: #000;
-  border-color: #e5e5e5;
+.attendance button[value="rest-start"],
+.attendance button[value="rest-end"] {
+    background: #fff;
+    color: #000;
+    border-color: #e5e5e5;
 }
 
 /* finished のメッセージ */
 .attendance .message,
-.attendance p{
-  margin-top: 8px;
-  font-size: 26px;
-  font-weight: bold;
-  line-height: 1;
-  letter-spacing: 0.15em;
+.attendance p {
+    margin-top: 8px;
+    font-size: 26px;
+    font-weight: bold;
+    line-height: 1;
+    letter-spacing: 0.15em;
 }
 
 /* ========= state差分：working だけボタン2つを横並び ========= */
-.attendance--working{
-  /* 中央寄せのままでOK */
+.attendance--working {
+    /* 中央寄せのままでOK */
 }
 
-.attendance--working form{
-  margin: 0 18px; /* 2つのボタンの間隔 */
+.attendance--working form {
+    margin: 0 18px; /* 2つのボタンの間隔 */
 }
 
-/* idle / on_break はボタン1個なので中央のまま */
+/* idle / on_rest はボタン1個なので中央のまま */
 .attendance--idle form,
-.attendance--on_break form{
-  margin: 0;
+.attendance--on_rest form {
+    margin: 0;
 }

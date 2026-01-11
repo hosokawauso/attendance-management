@@ -23,7 +23,8 @@ class CreateStampsTable extends Migration
             $table->date('stamp_date')->index();
             $table->time('start_work')->nullable();
             $table->time('end_work')->nullable();
-            $table->string('remarks')->nullable();
+/*             $table->unsignedInteger('total_work')->nullable();
+ */            $table->string('remarks')->nullable();
             $table->timestamps();
 
         });
