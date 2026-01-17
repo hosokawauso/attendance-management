@@ -29,7 +29,7 @@ class AdminAttendanceUpdateRequest extends FormRequest
             'end_work'   => ['nullable', 'date_format:H:i', 'after_or_equal:start_work'],
             'rests.*.start' => ['nullable','date_format:H:i'],
             'rests.*.end'   => ['nullable','date_format:H:i', 'after_or_equal:rests.*.start'],
-            'remarks'    => ['required','string', 'max:255'],
+            'admin_comment'    => ['required','string', 'max:255'],
 
         ];
     }
@@ -39,7 +39,7 @@ class AdminAttendanceUpdateRequest extends FormRequest
         return [
             'end_work.after_or_equal'=>'出勤時間もしくは退勤時間が不適切な値です',
             'rests.*.end.after_or_equal'=>'休憩時間が不適切な値です',
-            'remarks.required' => '備考を記入してください',
+            'admin_comment.required' => '備考を記入してください',
         ];
     }
 

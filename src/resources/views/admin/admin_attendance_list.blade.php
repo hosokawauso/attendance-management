@@ -48,7 +48,7 @@
           </thead>
           <tbody>
 
-          @foreach($stamps as $stamp)
+{{--           @foreach($stamps as $stamp)
             @php
               $restMin = $stamp?->restMinutes() ?? 0;
               $workMin = ($stamp && $stamp->start_work && $stamp->end_work)
@@ -80,7 +80,54 @@
               @endif
             </td>
           </tr>
-        @endforeach
+        @endforeach --}}
+
+@foreach($stamps as $stamp)
+  @php
+    $restMin = $stamp?->restMinutes() ?? 0;
+
+    $workMin = 0;
+    if ($stamp && $stamp->start_work && $stamp->end_work) {
+        $day = $stamp->stamp_date instanceof \Carbon\Carbon
+            ? $stamp->stamp_date->toDateString()
+            : (string) $stamp->stamp_date;
+
+        $start = \Carbon\Carbon::parse($day.' '.(string)$stamp->start_work, 'Asia/Tokyo');
+        $end   = \Carbon\Carbon::parse($day.' '.(string)$stamp->end_work, 'Asia/Tokyo');
+
+        // 日跨ぎがあり得るなら
+        if ($end->lt($start)) {
+            $end->addDay();
+        }
+
+        $workMin = $start->diffInMinutes($end);
+    }
+
+    $restHm = sprintf('%02d:%02d', intdiv($restMin, 60), $restMin % 60);
+
+    $netWorkMin = max(0, $workMin - $restMin);
+    $netWorkHm  = sprintf('%02d:%02d', intdiv($netWorkMin, 60), $netWorkMin % 60);
+  @endphp
+
+  <tr>
+    <td>{{ $stamp?->staff?->name ?? ' ' }}</td>
+
+    {{-- time型は文字列なので format() じゃなく substr() --}}
+    <td>{{ $stamp?->start_work ? substr((string)$stamp->start_work, 0, 5) : ' ' }}</td>
+    <td>{{ $stamp?->end_work   ? substr((string)$stamp->end_work, 0, 5) : ' ' }}</td>
+
+    <td>{{ $stamp ? $restHm : ' ' }}</td>
+    <td>{{ $stamp ? $netWorkHm : ' ' }}</td>
+
+    <td>
+      @if ($stamp)
+        <a href="{{ route('admin.attendance.detail', $stamp->id) }}">詳細</a>
+      @else
+        <div>詳細</div>
+      @endif
+    </td>
+  </tr>
+@endforeach
           </tbody>
         </table>
           @endif

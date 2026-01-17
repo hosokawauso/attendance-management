@@ -4,7 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Stamp;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 
 class StampFactory extends Factory
 {
@@ -25,5 +25,17 @@ class StampFactory extends Factory
             'start_work' => $start->format('H:i'),
             'end_work'   => $end->format('H:i'),
         ];
+    }
+
+    public function workMinutes(): int
+    {
+        if (!$this->start_work || !$this->end_work) return 0;
+
+        $start = Carbon::parse($this->stamp_date->toDateString().' '.$this->start_work);
+        $end   = Carbon::parse($this->stamp_date->toDateString().' '.$this->end_work);
+
+        if ($end->lt($start)) $end->addDay();
+
+        return $start->diffInMinutes($end);
     }
 }

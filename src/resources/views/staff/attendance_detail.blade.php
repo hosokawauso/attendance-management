@@ -28,9 +28,17 @@
       <tr>
         <th>出勤・退勤</th>
         <td>
-          <input type="time" name="start_work" value="{{ $stamp->start_work->format('H:i') }}">
+          <input type="time" name="start_work" value="{{ $stamp->start_work ? substr((string)$stamp->start_work, 0, 5) : '' }}">
           ～
-          <input type="time" name="end_work" value="{{ $stamp->end_work->format('H:i') }}">
+          <input type="time" name="end_work" value="{{ $stamp->end_work ? substr((string)$stamp->end_work, 0, 5) : '' }}">
+
+          @error('start_work')
+            <div class="error">{{ $message }}</div>
+          @enderror
+
+          @error('end_work')
+            <div class="error">{{ $message }}</div>
+          @enderror
         </td>
       </tr>
 
@@ -38,21 +46,35 @@
         $restCount = max(1, $rests->count());
       @endphp
 
+      @error('rests')
+        <tr>
+          <th></th>
+          <td>
+            <div class="error">{{ $message }}</div>
+          </td>
+        </tr>
+      @enderror
+
       @for ($i = 0; $i < $restCount; $i++)
         @php
           $rest = $rests[$i] ?? null;
         @endphp
 
         <tr>
-          <th>休憩{{ $i + 1 }}</th>
-          <td>
-            <input type="time"
-                  name="rests[{{ $i }}][start]"
-                  value="{{  $rest?->start_rest?->format('H:i') ?? '' }}">
-                  ～
-            <input type="time"
-                  name="rests[{{ $i }}][end]"
+          <th>休憩{{ $i > 0 ? $i + 1 : '' }}</th>
+          <td class="time-range">
+            <input type="time" name="rests[{{ $i }}][start]"
+                  value="{{ $rest?->start_rest?->format('H:i') ?? '' }}">
+            <span class="range-sep">～</span>
+            <input type="time" name="rests[{{ $i }}][end]"
                   value="{{ $rest?->end_rest?->format('H:i') ?? '' }}">
+            @error("rests.$i.start")
+              <div class="error">{{ $message }}</div>
+            @enderror
+
+            @error("rests.$i.end")
+              <div class="error">{{ $message }}</div>
+            @enderror
           </td>
         </tr>
       @endfor

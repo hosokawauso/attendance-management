@@ -71,7 +71,10 @@ return [
             'model' => App\Models\Staff::class,
         ],
 
-        App\Providers\FortifyServiceProvider::class,
+    'staffs' => [
+        'driver' => 'eloquent',
+        'model' => App\Models\Staff::class,
+        ],
     ],
 
     /*

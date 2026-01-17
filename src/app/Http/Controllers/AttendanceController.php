@@ -40,7 +40,7 @@ class AttendanceController extends Controller
                 if ($action === 'clock-in') {
                     // すでに開始済みなら弾く（stateガードで通常は来ない）
                     if ($stamp->start_work) abort(409, 'already started');
-                    $stamp->start_work = $now;
+                    $stamp->start_work = $now->format('H:i');
                     $stamp->save();
                     return;
                 }
@@ -59,7 +59,7 @@ class AttendanceController extends Controller
                 if ($action === 'rest-end') {
                     $rest = $stamp->rests()->whereNull('end_rest')->latest('start_rest')->first();
                     if (!$rest) abort(409, 'no open rest');
-                    $rest->end_rest = $now;
+                    $rest->end_rest = $now->format('H:i');
                     $rest->save();
                     return;
                 }
@@ -69,19 +69,18 @@ class AttendanceController extends Controller
                     $open = $stamp->rests()->whereNull('end_rest')->exists();
                     if ($open) abort(409, 'rest not ended');
 
-                    $stamp->end_work = $now;
+                    $stamp->end_work = $now->format('H:i');
 
                     // 合計計算（分）
                     $work = Carbon::parse($stamp->start_work)->diffInMinutes($stamp->end_work);
                     $rest = $stamp->restMinutes();
-                    /* $stamp->total_work = max(0, $work - $rest); */
 
                     $stamp->save();
                     return;
                 }
             });
 
-            return back(); // /attendance を再描画
+            return back();
         }
 
         // 本日の休憩ログ
@@ -101,6 +100,7 @@ class AttendanceController extends Controller
     private function calcState(): array
     {
         $today = today('Asia/Tokyo');
+
         $stamp = Stamp::where('staff_id', Auth::id())
             ->whereDate('stamp_date', $today)
             ->first();

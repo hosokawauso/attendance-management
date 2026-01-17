@@ -2,10 +2,10 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 use App\Models\Staff;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class GetDateAndTimeTest extends TestCase
 {

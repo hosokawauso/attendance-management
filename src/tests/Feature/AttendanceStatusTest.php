@@ -39,7 +39,7 @@ class AttendanceStatusTest extends TestCase
         Carbon::setTestNow();
     }
 
-    public function test_status_is_working_when_staff_is_on_the_clock()
+    public function test_status_is_working_when_staff_is_clocked_in()
     {
         Carbon::setTestNow(Carbon::create(2026, 1, 11, 15, 46, 0, 'Asia/Tokyo'));
 

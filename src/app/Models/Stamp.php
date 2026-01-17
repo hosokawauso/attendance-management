@@ -27,8 +27,6 @@ class Stamp extends Model
     protected $casts = [
         'status' => 'integer',
         'stamp_date' => 'date',
-        'start_work' => 'datetime',
-        'end_work' => 'datetime',
     ];
 
     public function staff()

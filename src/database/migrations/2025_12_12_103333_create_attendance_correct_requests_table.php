@@ -25,7 +25,7 @@ class CreateAttendanceCorrectRequestsTable extends Migration
             $table->time('requested_start_work')->nullable();
             $table->time('requested_end_work')->nullable();
             $table->string('requested_remarks', 255);
-            $table->string('admin_comment', 255);
+            $table->string('admin_comment', 255)->nullable()->change();
 
             $table->foreignId('approved_by')->nullable()->constrained('staffs')->nullOnDelete();
             $table->timestamp('approved_at')->nullable();
