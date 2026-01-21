@@ -40,31 +40,38 @@
           @foreach($period as $date)
             @php
               $dateKey = $date->format('Y-m-d');
-
               $stamp = $stampsByDate[$dateKey] ?? null;
 
-              $restMin = $stamp?->restMinutes() ?? 0;
-              $workMin = ($stamp && $stamp->start_work && $stamp->end_work)
-                          ? $stamp->start_work->diffInMinutes($stamp->end_work)
-                          : 0;
-              $restHour = intdiv($restMin, 60);
-              $restMinute = $restMin % 60;
-              $restHm = sprintf('%02d:%02d', $restHour, $restMinute);
+              // まずデフォルト（stamp無い日）
+              $restMin = 0;
+              $workMin = 0;
+              $restHm = ' ';
+              $netWorkHm = ' ';
 
-              // 実労働時間 (分)
-              $netWorkMin = max(0, $workMin - $restMin);
-              $netWorkHour = intdiv($netWorkMin, 60);
-              $netWorkMinute = $netWorkMin % 60;
-              $netWorkHm = sprintf('%02d:%02d', $netWorkHour, $netWorkMinute);
+              if ($stamp) {
+                  // 休憩（分）
+                  $restMin = $stamp->restMinutes();
+
+                  // TIME文字列を「stamp_date + time」でCarbon化して差分計算
+                  if (!empty($stamp->start_work) && !empty($stamp->end_work)) {
+                      $day = $date->format('Y-m-d');
+                      $start = \Carbon\Carbon::parse($day.' '.$stamp->start_work, 'Asia/Tokyo');
+                      $end   = \Carbon\Carbon::parse($day.' '.$stamp->end_work, 'Asia/Tokyo');
+                      $workMin = $start->diffInMinutes($end);
+                  }
+
+                  $restHm = sprintf('%02d:%02d', intdiv($restMin, 60), $restMin % 60);
+
+                  $netWorkMin = max(0, $workMin - $restMin);
+                  $netWorkHm = sprintf('%02d:%02d', intdiv($netWorkMin, 60), $netWorkMin % 60);
+              }
 
               $week = (int) $date->format('w');
-            @endphp
-
-            <tr>
+            @endphp            <tr>
               <td>{{ $date->format('m/d') }}（{{ $weekdays[$week] }}）</td>
 
-              <td>{{ $stamp?->start_work?->format('H:i') ?? ' ' }}</td>
-              <td>{{ $stamp?->end_work?->format('H:i') ?? ' ' }}</td>
+              <td>{{ $stamp?->start_work ? substr($stamp->start_work, 0, 5) : ' ' }}</td>
+              <td>{{ $stamp?->end_work ? substr($stamp->end_work, 0, 5) : ' ' }}</td>
 
               <td>{{ $stamp ? $restHm : ' ' }}</td>
 
@@ -72,7 +79,7 @@
 
               <td>
                 @if ($stamp)
-                  <a href="{{ route('admin.attendance.detail', ['stamp' => $stamp->id]) }}">詳細</a>
+                  <a href="{{ route('admin.attendance.detail', $stamp->id) }}">詳細</a>
                 @else
                   <div>詳細</div>
                 @endif

@@ -36,13 +36,17 @@
       <tr>
         <th>出勤・退勤</th>
         <td class="time-range">
-          <input type="time" name="start_work" value="{{ $stamp->start_work?->format('H:i') }}">
+          <input type="time" name="start_work" value="{{ $stamp->start_work_carbon?->format('H:i') ?? '-' }}">
           <span class="range-sep">～</span>
-          <input type="time" name="end_work" value="{{ $stamp->end_work?->format('H:i') }}">
-        <p class="error-message">
-        @error('end_work')
-          {{ $message }}
-        @enderror
+          <input type="time" name="end_work" value="{{ $stamp->end_work_carbon?->format('H:i') ?? '-' }}">
+
+          @error('start_work')
+            <div class="error">{{ $message }}</div>
+          @enderror
+
+          @error('end_work')
+            <div class="error">{{ $message }}</div>
+          @enderror
         </p>
         </td>
       </tr>
@@ -64,19 +68,28 @@
             <span class="range-sep">～</span>
             <input type="time" name="rests[{{ $i }}][end]"
                   value="{{ $rest?->end_rest?->format('H:i') ?? '' }}">
+            <p class="error-message">
+            @error("rests.$i.start")
+              <div class="error">{{ $message }}</div>
+            @enderror
+
+            @error("rests.$i.end")
+              <div class="error">{{ $message }}</div>
+            @enderror
+            </p>
           </td>
         </tr>
       @endfor
 
         <tr>
-          <th class="remarks">備考</th>
+          <th class="admin_comment">備考</th>
           <td class="text-cell">
             <input type="text"
-            class="remarks-input"
-            name="remarks"
-            value="{{ old('remarks', $stamp->remarks) }}">
+            class="admin_comment-input"
+            name="admin_comment"
+            value="{{ old('admin_comment', $stamp->admin_comment) }}">
         <p class="error-message">
-        @error('remarks')
+        @error('admin_comment')
           {{ $message }}
         @enderror
         </p>

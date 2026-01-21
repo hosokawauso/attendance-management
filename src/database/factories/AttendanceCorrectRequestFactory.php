@@ -27,7 +27,7 @@ class AttendanceCorrectRequestFactory extends Factory
             'requested_start_work' => $start->format('H:i'),
             'requested_end_work' => $end->format('H:i'),
             'requested_remarks' => $this->faker->realText(20),
-            'admin_comment' => $this->faker->realText(20),
+            /* 'admin_comment' => $this->faker->realText(20), */
         ];
     }
 

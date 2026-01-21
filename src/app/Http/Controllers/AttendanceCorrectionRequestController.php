@@ -78,13 +78,12 @@ class AttendanceCorrectionRequestController extends Controller
 
             $stamp->rests()->delete();
 
-            foreach($attendance_correct_request->rests as $r) {
-                if(!$r->requested_start_rest && !$r->requested_end_rest) continue;
+            foreach($attendance_correct_request->rests as $apply) {
+                if(!$apply->requested_start_rest && !$apply->requested_end_rest) continue;
 
                 $stamp->rests()->create([
-                    'stamp_date' => $baseDate->todateString(),
-                    'start_rest' => $r->getRawOriginal('requested_start_rest'),
-                    'end_rest' => $r->getRawOriginal('requested_end_rest'),
+                    'start_rest' => $apply->getRawOriginal('requested_start_rest'),
+                    'end_rest' => $apply->getRawOriginal('requested_end_rest'),
                 ]);
             }
 
@@ -92,14 +91,17 @@ class AttendanceCorrectionRequestController extends Controller
             $attendance_correct_request->approved_by = $admin->id;
             $attendance_correct_request->approved_at = now();
             $attendance_correct_request->save();
-
         });
 
-        return response()->json([
-            'ok' => true,
-            'status' => $attendance_correct_request->status,
-            'label' => '承認済み',
-        ]);
+        if (request()->expectsJson()) {
+            return response()->json([
+                'ok' => true,
+                'status' => $attendance_correct_request->fresh()->status,
+                'label' => '承認済み',
+            ]);
+        }
+
+        return redirect('/stamp_correction_request/list');
     }
 
 }

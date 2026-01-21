@@ -27,8 +27,11 @@ class AdminAttendanceUpdateRequest extends FormRequest
         return [
             'start_work' => ['nullable','date_format:H:i'],
             'end_work'   => ['nullable', 'date_format:H:i', 'after_or_equal:start_work'],
+
+            'rests' => ['array'],
             'rests.*.start' => ['nullable','date_format:H:i'],
             'rests.*.end'   => ['nullable','date_format:H:i', 'after_or_equal:rests.*.start'],
+
             'admin_comment'    => ['required','string', 'max:255'],
 
         ];

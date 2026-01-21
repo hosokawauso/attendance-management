@@ -55,7 +55,7 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/admin/staff/list', [AdminController::class, 'staffList'])->name('admin.staff.list');
 
-Route::get('/admin/attendance/list/{staff}', [AdminController::class, 'staffMonthly'])->name('admin.attendance.staff.monthly');
+Route::get('/admin/attendance/staff/{staff}', [AdminController::class, 'staffMonthly'])->name('admin.attendance.staff.monthly');
 
 Route::get('/stamp_correction_request/list', [AdminController::class, 'approved'])->name('admin.stamp_correction_request.list');
 

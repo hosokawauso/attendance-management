@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Stamp extends Model
 {
@@ -52,6 +53,16 @@ class Stamp extends Model
             ->sum(function($r) {
                 return Carbon::parse($r->start_rest)->diffInMinutes(Carbon::parse($r->end_rest));
             });
+    }
+
+    public function getStartWorkCarbonAttribute()
+    {
+        return $this->start_work ? Carbon::createFromFormat('H:i:s', $this->start_work) : null;
+    }
+
+    public function getEndWorkCarbonAttribute()
+    {
+        return $this->end_work ? Carbon::createFromFormat('H:i:s', $this->end_work) : null;
     }
 
 }

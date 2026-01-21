@@ -156,11 +156,13 @@ class AdminController extends Controller
         $stamp->remarks = $validated['remarks'] ?? null;
         $stamp->save();
 
-        $restInputs = $validated['rests'] ?? null;
+        $restInputs = $validated['rests'] ?? [];
 
         if (!is_array($restInputs)) {
             $restInputs = [];
         }
+
+        $stamp->rests()->delete();
 
         foreach($restInputs as $row) {
             $start = $row['start'] ?? null;
@@ -171,14 +173,13 @@ class AdminController extends Controller
             }
 
             $stamp->rests()->create([
-                'stamp_date' => $stamp->stamp_date,
                 'start_rest' => $start,
                 'end_rest' => $end,
             ]);
         }
 
         return redirect()
-            ->route('admin.attendance.show', $stamp->id);
+            ->route('admin.attendance.detail', $stamp->id);
 
     }
 

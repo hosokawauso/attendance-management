@@ -73,13 +73,6 @@ class AttendanceUpdateRequest extends FormRequest
     {
         return [
             'remarks.required' => '備考を記入してください',
-            'remarks.max'      => '備考は255文字以内で記入してください',
-
-            'start_work.date_format' => '出勤時間の形式が不正です',
-            'end_work.date_format'   => '退勤時間の形式が不正です',
-
-            'rests.*.start.date_format' => '休憩開始時間の形式が不正です',
-            'rests.*.end.date_format'   => '休憩終了時間の形式が不正です',
         ];
     }
 }
