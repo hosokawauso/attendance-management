@@ -1,7 +1,8 @@
-# COACHTECH フリマアプリ
+# 勤怠管理アプリ
 
 模擬案件で作成した勤怠管理アプリです。
 スタッフ登録、ログイン、出勤時間、休憩開始・終了、退勤を記録することができます。
+
 ## 環境構築
 
 **Docker ビルド**
@@ -18,7 +19,7 @@
 3. 「.env.example」ファイルを 「.env」ファイルに命名を変更。または、新しく.env ファイルを作成
 4. .env に以下の環境変数を追加
 
-```text
+````text
 DB_CONNECTION=mysql
 DB_HOST=mysql
 DB_PORT=3306
@@ -30,7 +31,7 @@ DB_PASSWORD=laravel_pass
 
 ```bash
 php artisan key:generate
-```
+````
 
 6. マイグレーションの実行
 
@@ -41,16 +42,25 @@ php artisan migrate
 7. シーディングの実行
 
 ```bash
-php artisan db:seed --class=UserSeeder
-php artisan db:seed --class=CategorySeeder
-php artisan db:seed --class=ItemSeeder
+php artisan db:seed
 ```
 
-
 ## テストケース
-このプロジェクトでは主にFeatureテストで画面遷移、認証/権限、バリデーション、DEの更新の整合性を検証しています。
 
-**テスト 環境構築**
+このプロジェクトは Docker Compose（php / mysql）環境を前提に、Laravel の Feature テストを中心に動作確認します。  
+※ **開発用DB（laravel_db）とは別に、テスト専用DB（demo_test）を作成**して実行してください（事故防止）。
+
+### 1. テスト用DBを作成（MySQLコンテナ）
+
+````bash
+MySQLコンテナに入る
+`docker-compose exec mysql bash`
+MySQLコンテナ上
+`mysql -u root -p`
+MySQLログイン後
+`> CREATE DATABASE demo_test`
+
+### 2. .env.testingを作成
 
 1. `docker-compose exec php bash`
 2. `cp .env .env.testing`
@@ -66,7 +76,7 @@ QUEUE_CONNECTION=sync
 DB_CONNECTION=mysql
 DB_HOST=mysql
 DB_PORT=3306
-DB_DATABASE=your_app_test
+DB_DATABASE=demo_test
 DB_USERNAME=root
 DB_PASSWORD=root
 
@@ -74,7 +84,15 @@ DB_PASSWORD=root
 
 ```bash
 php artisan key:generate --env=testing
-```
+````
+
+5.テスト用データベースの作成
+MySQLコンテナに入る
+`docker-compose exec mysql bash`
+MySQLコンテナ上
+`mysql -u root -p`
+MySQLログイン後
+`> CREATE DATABASE demo_test`
 
 5. マイグレーションの実行
 
@@ -82,18 +100,10 @@ php artisan key:generate --env=testing
 php artisan migrate --env=testing
 ```
 
-
 1. Feature/Unit テスト
 
 ```bash
 docker compose exec app php artisan test
-```
-
-2. Dusk テスト
-
-```bash
-php artisan dusk:install
-php artisan dusk
 ```
 
 ## 使用技術(実行環境)
@@ -103,18 +113,14 @@ php artisan dusk
 ・MySQL 8.0.26  
 ・Fortify 1.19.1  
 ・Blade  
-・Docker/Doker Compose  
+・Docker/Docker Compose  
 ・Git/GitHub  
-・Stripe アカウント(テストキー)  
 ・MailHog(開発時のメール確認)
 
 ## ER 図
-
-![alt text](<flea-market-app ER図.png>)
 
 ## URL
 
 - 開発環境: http://localhost/
 - phpMyAdmin: http://localhost:8080/
 - MaliHog: http://localhost:8025/
-
