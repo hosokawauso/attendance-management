@@ -27,6 +27,8 @@ DB_DATABASE=laravel_db
 DB_USERNAME=laravel_user
 DB_PASSWORD=laravel_pass
 
+````
+
 5. アプリケーションキーの作成
 
 ```bash
@@ -52,14 +54,11 @@ php artisan db:seed
 
 ### 1. テスト用DBを作成（MySQLコンテナ）
 
-1.MySQLコンテナに入る
-`docker-compose exec mysql bash`
+1.`docker-compose exec mysql bash`
 
-2.MySQLコンテナ上
-`mysql -u root -p`
+2.`mysql -u root -p`
 
-3.MySQLログイン後
-`> CREATE DATABASE demo_test`
+3.`> CREATE DATABASE demo_test`
 
 ### 2. .env.testingを作成
 
@@ -81,19 +80,13 @@ DB_DATABASE=demo_test
 DB_USERNAME=root
 DB_PASSWORD=root
 
+````
+
 4. アプリケーションキーの作成
 
 ```bash
 php artisan key:generate --env=testing
 ````
-
-5.テスト用データベースの作成
-MySQLコンテナに入る
-`docker-compose exec mysql bash`
-MySQLコンテナ上
-`mysql -u root -p`
-MySQLログイン後
-`> CREATE DATABASE demo_test`
 
 5. マイグレーションの実行
 
@@ -101,7 +94,7 @@ MySQLログイン後
 php artisan migrate --env=testing
 ```
 
-1. Feature/Unit テスト
+6. Feature/Unit テスト
 
 ```bash
 docker compose exec app php artisan test
@@ -116,9 +109,10 @@ docker compose exec app php artisan test
 ・Blade  
 ・Docker/Docker Compose  
 ・Git/GitHub  
-・MailHog(開発時のメール確認)
+・MaliHog  
 
 ## ER 図
+![alt text](attendande-management_ER_Figure.png)
 
 ## URL
 
