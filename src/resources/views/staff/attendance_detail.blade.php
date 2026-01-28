@@ -5,13 +5,24 @@
 @endsection
 
 @section('content')
-<div class="detail-container">
+<div class="detail-wrap">
   <div class="page-title" >
     <h2>勤怠詳細</h2>
   </div>
+  
   <form action="{{ route( 'attendance.request', $stamp->id )}}" method="POST">
     @csrf
+    <div class="card card-table">
+      <div class="table-wrapper">
+
     <table class="detail-table">
+
+      <colgroup>
+        <col class="col-th">
+        <col class="col-td">
+        <col class="col-err">
+      </colgroup>
+
       <tr>
         <th>名前</th>
         <td>{{ $staff->name }}</td>
@@ -19,41 +30,36 @@
 
       <tr>
         <th>日付</th>
-        <td>
-          {{ $stamp->stamp_date->format('Y年') }}
-          {{ $stamp->stamp_date->format('m月d日') }}
+        <td class="date-range">
+          <span class="date-year">
+            {{ $stamp->stamp_date->format('Y年') }}
+          </span>
+          <span class="date-md">
+            {{ $stamp->stamp_date->format('m月d日') }}
+          </span>
         </td>
+        <td class="error-col"></td>
       </tr>
 
       <tr>
         <th>出勤・退勤</th>
-        <td>
+        <td td class="time-range">
+          <div class="time-pair">
           <input type="time" name="start_work" value="{{ $stamp->start_work ? substr((string)$stamp->start_work, 0, 5) : '' }}">
-          ～
+          <span class="range-sep">～</span>
           <input type="time" name="end_work" value="{{ $stamp->end_work ? substr((string)$stamp->end_work, 0, 5) : '' }}">
+          </div>
+        </td>
+        <td class="error-col">
+          <p class="error-message">@error('start_work'){{ $message }}@enderror</p>
 
-          @error('start_work')
-            <div class="error">{{ $message }}</div>
-          @enderror
-
-          @error('end_work')
-            <div class="error">{{ $message }}</div>
-          @enderror
+          <p class="error-message">@error('end_work'){{ $message }}@enderror</p>
         </td>
       </tr>
 
       @php
         $restCount = max(1, $rests->count());
       @endphp
-
-      @error('rests')
-        <tr>
-          <th></th>
-          <td>
-            <div class="error">{{ $message }}</div>
-          </td>
-        </tr>
-      @enderror
 
       @for ($i = 0; $i < $restCount; $i++)
         @php
@@ -63,35 +69,36 @@
         <tr>
           <th>休憩{{ $i > 0 ? $i + 1 : '' }}</th>
           <td class="time-range">
+            <div class="time-pair">
             <input type="time" name="rests[{{ $i }}][start]"
                   value="{{ $rest?->start_rest?->format('H:i') ?? '' }}">
             <span class="range-sep">～</span>
             <input type="time" name="rests[{{ $i }}][end]"
                   value="{{ $rest?->end_rest?->format('H:i') ?? '' }}">
-            @error("rests.$i.start")
-              <div class="error">{{ $message }}</div>
-            @enderror
-
-            @error("rests.$i.end")
-              <div class="error">{{ $message }}</div>
-            @enderror
+            </div>
+          </td>
+          <td class="error-col">
+            @error('rests') {{ $message }} @enderror
           </td>
         </tr>
       @endfor
 
         <tr>
           <th>備考</th>
-          <td>
+          <td class="remarks">
             <input type="text"
             class="remarks-input"
             name="remarks"
             value="{{ old('remarks', $stamp->remarks) }}">
-      @error('remarks')
-        <div class="error">{{ $message }}</div>
-      @enderror
+          </td>
+          <td class="error-col">
+            @error('remarks'){{ $message }} @enderror
           </td>
         </tr>
-    </table>
+      </table>
+    </div>
+    </div>
+
     <div class="detail-footer">
       @php
         $reqStatus = $latestReq->status ?? null;

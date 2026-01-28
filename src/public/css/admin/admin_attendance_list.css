@@ -1,8 +1,6 @@
 .admin-attendance-wrap {
-  width: 100%;
+  width: 70%;
   max-width: 1000px;
-  margin: 0 auto;
-  padding: 0 16px;
 }
 
 .month-nav {

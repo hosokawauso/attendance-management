@@ -1,5 +1,5 @@
 .detail-wrap {
-  width: 60%;
+  width: 70%;
 }
 
 .page-title {
@@ -31,9 +31,14 @@
   table-layout: fixed;
 }
 
+.detail-table tr {
+  border-bottom: 2px solid #E1E1E1
+}
+
 .detail-table th,
 .detail-table td {
   padding: 5px 16px;
+  height: 100px;
   text-align: center;
   vertical-align: middle;
   font-size: 16px;
@@ -45,12 +50,10 @@
   font-weight: 700;
   text-align: left;
   padding: 20px 30px;
-  border-bottom: 2px solid #E1E1E1
 }
 
 .card-table td {
   padding: 14px 16px;
-  border-bottom: 2px solid #E1E1E1;
   color: #000000;
   font-weight: bold;
   text-align: left;

@@ -16,6 +16,13 @@
       <div class="table-wrapper">
 
     <table class="detail-table">
+
+      <colgroup>
+        <col class="col-th">
+        <col class="col-td">
+        <col class="col-err">
+      </colgroup>
+
       <tr>
         <th>名前</th>
         <td>{{ $staff->name }}</td>
@@ -23,7 +30,7 @@
 
       <tr>
         <th>日付</th>
-        <td class="time-range">
+        <td class="date-range">
           <span class="date-year">
             {{ $stamp->stamp_date->format('Y年') }}
           </span>
@@ -36,18 +43,16 @@
       <tr>
         <th>出勤・退勤</th>
         <td class="time-range">
+          <div class="time-pair">
           <input type="time" name="start_work" value="{{ $stamp->start_work_carbon?->format('H:i') ?? '-' }}">
           <span class="range-sep">～</span>
           <input type="time" name="end_work" value="{{ $stamp->end_work_carbon?->format('H:i') ?? '-' }}">
+          </div>
+        </td>
+        <td class="error-col">
+          <p class="error-message">@error('start_work'){{ $message }}@enderror</p>
 
-          @error('start_work')
-            <div class="error">{{ $message }}</div>
-          @enderror
-
-          @error('end_work')
-            <div class="error">{{ $message }}</div>
-          @enderror
-        </p>
+          <p class="error-message">@error('end_work'){{ $message }}@enderror</p>
         </td>
       </tr>
 
@@ -63,41 +68,35 @@
         <tr>
           <th>休憩{{ $i > 0 ? $i + 1 : '' }}</th>
           <td class="time-range">
+            <div class="time-pair">
             <input type="time" name="rests[{{ $i }}][start]"
                   value="{{ $rest?->start_rest?->format('H:i') ?? '' }}">
             <span class="range-sep">～</span>
             <input type="time" name="rests[{{ $i }}][end]"
                   value="{{ $rest?->end_rest?->format('H:i') ?? '' }}">
-            <p class="error-message">
-            @error("rests.$i.start")
-              <div class="error">{{ $message }}</div>
-            @enderror
-
-            @error("rests.$i.end")
-              <div class="error">{{ $message }}</div>
-            @enderror
-            </p>
+            </div>
+          </td>
+          <td class="error-col">
+            @error('rests') {{ $message }} @enderror
           </td>
         </tr>
       @endfor
 
         <tr>
-          <th class="admin_comment">備考</th>
-          <td class="text-cell">
+          <th >備考</th>
+          <td class="admin_comment">
             <input type="text"
             class="admin_comment-input"
             name="admin_comment"
             value="{{ old('admin_comment', $stamp->admin_comment) }}">
-        <p class="error-message">
-        @error('admin_comment')
-          {{ $message }}
-        @enderror
-        </p>
+          </td>
+          <td class="error-col">
+            @error('admin_comment'){{ $message }} @enderror
           </td>
         </tr>
-    </table>
-  </div>
-</div>
+      </table>
+    </div>
+    </div>
 
     <div class="detail-footer">
       <button type="submit" class="correction-btn">修正</button>

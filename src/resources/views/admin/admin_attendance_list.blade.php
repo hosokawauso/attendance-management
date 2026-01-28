@@ -48,40 +48,6 @@
           </thead>
           <tbody>
 
-{{--           @foreach($stamps as $stamp)
-            @php
-              $restMin = $stamp?->restMinutes() ?? 0;
-              $workMin = ($stamp && $stamp->start_work && $stamp->end_work)
-                        ? $stamp->start_work->diffInMinutes($stamp->end_work)
-                        : 0;
-
-              $restHour = intdiv($restMin, 60);
-              $restMinute = $restMin % 60;
-              $restHm = sprintf('%02d:%02d', $restHour, $restMinute);
-
-              // 実労働時間 (分)
-              $netWorkMin = max(0, $workMin - $restMin);
-              $netWorkHour = intdiv($netWorkMin, 60);
-              $netWorkMinute = $netWorkMin % 60;
-              $netWorkHm = sprintf('%02d:%02d', $netWorkHour, $netWorkMinute);
-          @endphp
-
-          <tr>
-            <td>{{ $stamp?->staff?->name ?? ' ' }}</td>
-            <td>{{ $stamp?->start_work?->format('H:i') ?? ' ' }}</td>
-            <td>{{ $stamp?->end_work?->format('H:i') ?? ' ' }}</td>
-            <td>{{ $stamp ? $restHm : ' ' }}</td>
-            <td>{{ $stamp ? $netWorkHm : ' ' }}</td>
-            <td>
-              @if ($stamp)
-                <a href="{{ route('admin.attendance.detail', $stamp->id) }}">詳細</a>
-              @else
-                <div>詳細</div>
-              @endif
-            </td>
-          </tr>
-        @endforeach --}}
-
 @foreach($stamps as $stamp)
   @php
     $restMin = $stamp?->restMinutes() ?? 0;
@@ -103,10 +69,10 @@
         $workMin = $start->diffInMinutes($end);
     }
 
-    $restHm = sprintf('%02d:%02d', intdiv($restMin, 60), $restMin % 60);
+    $restHm = sprintf('%d:%02d', intdiv($restMin, 60), $restMin % 60);
 
     $netWorkMin = max(0, $workMin - $restMin);
-    $netWorkHm  = sprintf('%02d:%02d', intdiv($netWorkMin, 60), $netWorkMin % 60);
+    $netWorkHm  = sprintf('%d:%02d', intdiv($netWorkMin, 60), $netWorkMin % 60);
   @endphp
 
   <tr>

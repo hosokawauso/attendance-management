@@ -60,10 +60,10 @@
                       $workMin = $start->diffInMinutes($end);
                   }
 
-                  $restHm = sprintf('%02d:%02d', intdiv($restMin, 60), $restMin % 60);
+                  $restHm = sprintf('%d:%02d', intdiv($restMin, 60), $restMin % 60);
 
                   $netWorkMin = max(0, $workMin - $restMin);
-                  $netWorkHm = sprintf('%02d:%02d', intdiv($netWorkMin, 60), $netWorkMin % 60);
+                  $netWorkHm = sprintf('%d:%02d', intdiv($netWorkMin, 60), $netWorkMin % 60);
               }
 
               $week = (int) $date->format('w');

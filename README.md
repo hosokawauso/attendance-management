@@ -52,12 +52,13 @@ php artisan db:seed
 
 ### 1. テスト用DBを作成（MySQLコンテナ）
 
-````bash
-MySQLコンテナに入る
+1.MySQLコンテナに入る
 `docker-compose exec mysql bash`
-MySQLコンテナ上
+
+2.MySQLコンテナ上
 `mysql -u root -p`
-MySQLログイン後
+
+3.MySQLログイン後
 `> CREATE DATABASE demo_test`
 
 ### 2. .env.testingを作成

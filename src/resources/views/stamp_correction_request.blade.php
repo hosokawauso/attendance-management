@@ -34,9 +34,9 @@
           <tr>
             <td>承認待ち</td>
             <td>{{ $req->staff->name ?? '-' }}</td>
-            <td>{{ $req->stamp?->stamp_date?->format('Y-m-d') ?? '-' }}</td>
+            <td>{{ $req->stamp?->stamp_date?->format('Y/m/d') ?? '-' }}</td>
             <td>{{ $req->requested_remarks ?? '-' }}</td>
-            <td>{{ $req->created_at?->format('Y-m-d') ?? '-' }}</td>
+            <td>{{ $req->created_at?->format('Y/m/d') ?? '-' }}</td>
             @php
               $isAdmin = Auth::user()->is_admin;
             @endphp
@@ -71,9 +71,9 @@
           <tr>
             <td>承認済み</td>
             <td>{{ $req->staff->name ?? '-' }}</td>
-            <td>{{ $req->stamp?->stamp_date?->format('Y-m-d') ?? '-' }}</td>
+            <td>{{ $req->stamp?->stamp_date?->format('Y/m/d') ?? '-' }}</td>
             <td>{{ $req-> requested_remarks ?? '-' }}</td>
-            <td>{{ $req->created_at?->format('Y-m-d') ?? '-' }}</td>
+            <td>{{ $req->created_at?->format('Y/m/d') ?? '-' }}</td>
             @php
               $isAdmin = Auth::user()->is_admin;
             @endphp

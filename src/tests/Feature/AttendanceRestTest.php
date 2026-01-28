@@ -174,7 +174,7 @@ class AttendanceRestTest extends TestCase
         $response = $this->get(route('attendance.list'));
         $response->assertStatus(200);
 
-        $response->assertSee('00:30');
+        $response->assertSee('0:30');
     }
 
 }
