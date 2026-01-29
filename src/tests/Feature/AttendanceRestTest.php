@@ -27,8 +27,7 @@ class AttendanceRestTest extends TestCase
 
     protected function tearDown(): void
     {
-        \Illuminate\Support\Carbon::setTestNow();
-        \Carbon\Carbon::setTestNow();
+        Carbon::setTestNow();
         parent::tearDown();
     }
 

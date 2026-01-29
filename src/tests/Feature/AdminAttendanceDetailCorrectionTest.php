@@ -66,13 +66,7 @@ class AdminAttendanceDetailCorrectionTest extends TestCase
         ]);
     }
 
-    /**
-     * 管理者の勤怠詳細URL（ここだけあなたの実装に合わせて修正）
-     * 例：
-     *   /admin/attendance/detail/{id}
-     *   /admin/attendance/{$id}
-     *   /attendance/detail/{id}（共通画面の場合）
-     */
+
     private function detailUrl(Stamp $stamp): string
     {
         return route('admin.attendance.detail', ['stamp' => $stamp->id]);

@@ -109,7 +109,6 @@ docker compose exec app php artisan test
 ・Blade  
 ・Docker/Docker Compose  
 ・Git/GitHub  
-・MaliHog  
 
 ## ER 図
 ![alt text](attendande-management_ER_Figure.png)
@@ -118,4 +117,3 @@ docker compose exec app php artisan test
 
 - 開発環境: http://localhost/
 - phpMyAdmin: http://localhost:8080/
-- MaliHog: http://localhost:8025/

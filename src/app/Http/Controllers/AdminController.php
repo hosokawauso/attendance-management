@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Staff;
 use App\Models\Stamp;
 use Carbon\Carbon;
+use Carbon\CarbonImmutable;
 use Carbon\CarbonPeriod;
 use App\Http\Requests\AdminLoginRequest;
 use App\Http\Requests\AdminAttendanceUpdateRequest;
@@ -72,20 +73,21 @@ class AdminController extends Controller
 
     public function staffMonthly(Request $request, Staff $staff)
     {
-        abort_unless(Auth::user()?->is_admin, 403);
 
-        $monthParam = $request->query('month', now('Asia/Tokyo')->format('Y-m'));
+    abort_unless(Auth::user()?->is_admin, 403);
+
+        $monthParam = (string) $request->query('month', now('Asia/Tokyo')->format('Y-m'));
         try {
-        $month = Carbon::createFromFormat('Y-m', $monthParam, 'Asia/Tokyo')->startOfMonth();
+        $month = CarbonImmutable::createFromFormat('Y-m', $monthParam, 'Asia/Tokyo')->startOfMonth();
         } catch (\Throwable $e) {
-            $month = now('Asia/Tokyo')->startOfMonth();
+            $month = CarbonImmutable::now('Asia/Tokyo')->startOfMonth();
         }
 
-        $start = $month->copy()->startOfMonth();
-        $end = $month->copy()->endOfMonth();
+        $start = $month->startOfMonth();
+        $end = $month->endOfMonth();
 
-        $prevMonth = $month->copy()->subMonth()->format('Y-m');
-        $nextMonth = $month->copy()->addMonth()->format('Y-m');
+        $prevMonth = $month->subMonth()->format('Y-m');
+        $nextMonth = $month->addMonth()->format('Y-m');
 
         $monthlyStamps = Stamp::with('rests')
             ->where('staff_id', $staff->id)
@@ -94,7 +96,7 @@ class AdminController extends Controller
             ->get();
 
         $stampsByDate = $monthlyStamps->keyBy(function ($stamp) {
-            if ($stamp->stamp_date instanceof \Carbon\Carbon) {
+            if ($stamp->stamp_date instanceof \Carbon\CarbonInterface) {
                 return $stamp->stamp_date->toDateString();
             }
 
@@ -102,6 +104,7 @@ class AdminController extends Controller
         });
 
         $period = CarbonPeriod::create($start,$end);
+
 
         return view('admin.admin_attendance_staff', compact(
             'staff',

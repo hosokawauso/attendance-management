@@ -5,7 +5,6 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
-
 use App\Models\Staff;
 use App\Models\Stamp;
 use App\Models\Rest;
