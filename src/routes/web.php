@@ -63,6 +63,11 @@ Route::get('/admin/attendance/{stamp}', [AdminController::class, 'detail'])->nam
 
 Route::post('/admin/attendance/{stamp}', [AdminController::class, 'update'])->name('admin.attendance.update');
 
+Route::get('/admin/attendance/staff/{staff}/monthly/csv', [AdminAttendanceController::class, 'staffMonthlyCsv'])
+    ->name('admin.attendance.staff.monthly.csv');
+
+
+
 
 
 

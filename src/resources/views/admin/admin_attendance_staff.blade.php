@@ -89,6 +89,10 @@
           </tbody>
         </table>
       @endif
+      <a class="nav-btn"
+        href="{{ route('admin.attendance.staff.monthly.csv', ['staff' => $staff->id, 'month' => $month->format('Y-m')]) }}">
+        CSV出力
+      </a>
     </div>
   </div>
 </div>
